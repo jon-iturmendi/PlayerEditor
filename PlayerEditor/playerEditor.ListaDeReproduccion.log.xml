@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2015-11-21T14:44:45</date>
+  <millis>1448113485021</millis>
+  <sequence>0</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>&lt;clinit&gt;</method>
+  <thread>14</thread>
+  <message></message>
+</record>
+<record>
+  <date>2015-11-21T14:44:45</date>
+  <millis>1448113485036</millis>
+  <sequence>1</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>&lt;clinit&gt;</method>
+  <thread>14</thread>
+  <message>21 de noviembre de 2015 14:44:45 CET</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486308</millis>
+  <sequence>2</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Añadiendo ficheros con filtro *Pentatonix*.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486313</millis>
+  <sequence>3</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>expresión regular del filtro: .*Pentatonix.*\.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486313</millis>
+  <sequence>4</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>FINE</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Procesando fichero Fichero erroneo Pentatonix.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486318</millis>
+  <sequence>5</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Añadido vídeo a lista de reproducción: Fichero erroneo Pentatonix.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>6</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>FINE</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Procesando fichero Fichero Pentatonix no video.txt</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>7</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>FINE</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Procesando fichero masFicheros</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>8</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>FINE</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Procesando fichero No del grupo.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>9</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>FINE</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Procesando fichero [Official Video] Daft Punk - Pentatonix.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>10</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Añadido vídeo a lista de reproducción: [Official Video] Daft Punk - Pentatonix.mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>11</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>FINE</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Procesando fichero [Official Video] I Need Your Love - Pentatonix (Calvin Harris feat. Ellie Goulding Cover).mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>12</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>Añadido vídeo a lista de reproducción: [Official Video] I Need Your Love - Pentatonix (Calvin Harris feat. Ellie Goulding Cover).mp4</message>
+</record>
+<record>
+  <date>2015-11-21T14:44:46</date>
+  <millis>1448113486323</millis>
+  <sequence>13</sequence>
+  <logger>playerEditor.ListaDeReproduccion</logger>
+  <level>INFO</level>
+  <class>playerEditor.ListaDeReproduccion</class>
+  <method>add</method>
+  <thread>14</thread>
+  <message>ficheros añadidos: 3</message>
+</record>
+</log>
