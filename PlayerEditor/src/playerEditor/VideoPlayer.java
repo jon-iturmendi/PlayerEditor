@@ -20,14 +20,10 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.FullScreenStrategy;
 import uk.co.caprica.vlcj.player.embedded.windows.Win32FullScreenStrategy;
 
-//  - Añadido evento de doble click en lista para seleccionar el fichero directamente
-//    (Nuevo método irA(int) en clase ListaDeReproduccion)
-
-/** Ventana principal de reproductor de vídeo
- * Utiliza la librería VLCj que debe estar instalada y configurada
- *     (http://www.capricasoftware.co.uk/projects/vlcj/index.html)
- * @author Andoni Eguíluz Morán
- * Facultad de Ingeniería - Universidad de Deusto
+/**
+ * Ventana principal del playerEditor.
+ * En esta misma ventana se encuentran tanto el reproductor como el editor de subtitulos.
+ *
  */
 public class VideoPlayer extends JFrame {
 	private static final long serialVersionUID = 1L;
