@@ -372,6 +372,8 @@ public class VideoPlayer extends JFrame {
 	 * 				el segundo el path donde encontrarlos.  Si no se suministran, se piden de forma interactiva. 
 	 */
 	public static void main(String[] args) {
+		BaseDeDatos.initBD("test2");
+		BaseDeDatos.crearTablaBD();
 		// Para probar con otro directorio descomentar estas dos líneas y poner los valores deseados:
 		// (Si se pasan argumentos al main, los usará)
 		if (args==null || args.length==0) 

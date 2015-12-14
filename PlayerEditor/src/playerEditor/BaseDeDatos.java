@@ -27,11 +27,13 @@ public class BaseDeDatos {
 	public static Connection initBD( String nombreBD ) {
 		try {
 		    Class.forName("org.sqlite.JDBC");
-		    connection = DriverManager.getConnection("jdbc:sqlite:" + nombreBD );
+		    connection = DriverManager.getConnection("jdbc:sqlite:" + nombreBD);
+		    System.out.println(connection + "conexion");
 			statement = connection.createStatement();
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 		    return connection;
 		} catch (ClassNotFoundException | SQLException e) {
+			System.err.println(e);
 			return null;
 		}
 	}
