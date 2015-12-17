@@ -3,6 +3,8 @@ package playerEditor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +82,7 @@ public class ListaDeReproduccion implements ListModel<String> {
 	 * @return	Número de ficheros que han sido añadidos a la lista
 	 */
 	public int add(String carpetaFicheros, String filtroFicheros) {
-		System.out.println( carpetaFicheros );
+		
 		int ficsAnyadidos = 0;
 		if (carpetaFicheros!=null) {
 			logger.log( Level.INFO, "Añadiendo ficheros con filtro " + filtroFicheros );
@@ -89,19 +91,50 @@ public class ListaDeReproduccion implements ListModel<String> {
 				filtroFicheros = filtroFicheros.replaceAll( "\\*", ".*" );  // Pone el símbolo de la expresión regular .* donde figure un *
 				logger.log( Level.INFO, "expresión regular del filtro: " + filtroFicheros );
 				Pattern pFics = Pattern.compile( filtroFicheros, Pattern.CASE_INSENSITIVE );
-				File fInic = new File(carpetaFicheros); 
-				if (fInic.isDirectory()) {
-					for( File f : fInic.listFiles() ) {
-						logger.log( Level.FINE, "Procesando fichero " + f.getName() );
-						if (f.isFile() && pFics.matcher(f.getName()).matches() ) { // Si cumple el patrón, se añade
-							ficsAnyadidos++;
-							logger.log( Level.INFO, "Añadido vídeo a lista de reproducción: " + f.getName() );
-							add( f );
-						}
+				
+				
+				ResultSet size = BaseDeDatos.getStatement().executeQuery("SELECT COUNT(RUTA) FROM video;");
+				int val = ((Number) size.getObject(1)).intValue();
+				
+				ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT RUTA FROM VIDEO;");
+				
+				ArrayList<File> listaFiles = new ArrayList<File>();
+				for (int i = 0; i<val; i++){
+					rs.next();
+					listaFiles.add(new File(rs.getString(1)));
+				}
+				
+				// Comprobacion del ArrayList<File> listaFiles
+				for (int i = 0; i<val; i++){
+					System.out.println(listaFiles.get(i).getPath());
+				}
+				
+				for( File f : listaFiles ) {
+					logger.log( Level.FINE, "Procesando fichero " + f.getName() );
+					if (f.isFile() && pFics.matcher(f.getName()).matches() ) { // Si cumple el patrón, se añade
+						ficsAnyadidos++;
+						logger.log( Level.INFO, "Añadido vídeo a lista de reproducción: " + f.getName() );
+						add( f );
 					}
 				}
+				
+				
+//				File fInic = new File(carpetaFicheros); 
+//				if (fInic.isDirectory()) {
+//					for( File f : fInic.listFiles() ) {
+//						logger.log( Level.FINE, "Procesando fichero " + f.getName() );
+//						if (f.isFile() && pFics.matcher(f.getName()).matches() ) { // Si cumple el patrón, se añade
+//							ficsAnyadidos++;
+//							logger.log( Level.INFO, "Añadido vídeo a lista de reproducción: " + f.getName() );
+//							add( f );
+//						}
+//					}
+//				}
 			} catch (PatternSyntaxException e) {
 				logger.log( Level.SEVERE, "Error en patrón de expresión regular ", e );
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		logger.log( Level.INFO, "ficheros añadidos: " + ficsAnyadidos );

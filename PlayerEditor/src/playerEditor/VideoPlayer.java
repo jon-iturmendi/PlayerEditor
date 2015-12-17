@@ -51,8 +51,8 @@ public class VideoPlayer extends JFrame {
 	// Datos asociados a la ventana
 	private ListaDeReproduccion listaRepVideos;  // Modelo para la lista de vídeos
 	// Array auxiliar y enumerado para gestión de botones
-	static String[] ficsBotones = new String[] { "Button Add", "Button Rewind", "Button Play Pause", "Button Fast Forward", "Button Maximize" };
-	static enum BotonDe { ANYADIR, ATRAS, PLAY_PAUSA, AVANCE, MAXIMIZAR };  // Mismo orden que el array
+	static String[] ficsBotones = new String[] { "Button Add", "Button Rewind", "Button Play Pause", "Button Fast Forward", "Button Maximize", "Button Edit" };
+	static enum BotonDe { ANYADIR, ATRAS, PLAY_PAUSA, AVANCE, MAXIMIZAR, EDITAR };  // Mismo orden que el array
 	static String[] ficsBotonesLR = new String[] { "open", "save", "saveas" };
 	static enum BotonDeLR { LOAD, SAVE, SAVEAS };  // Mismo orden que el array
 
@@ -372,8 +372,7 @@ public class VideoPlayer extends JFrame {
 	 * 				el segundo el path donde encontrarlos.  Si no se suministran, se piden de forma interactiva. 
 	 */
 	public static void main(String[] args) {
-		BaseDeDatos.initBD("test2");
-		BaseDeDatos.crearTablaBD();
+		BaseDeDatos.initBD("VideoPlayer1");
 		// Para probar con otro directorio descomentar estas dos líneas y poner los valores deseados:
 		// (Si se pasan argumentos al main, los usará)
 		if (args==null || args.length==0) 
