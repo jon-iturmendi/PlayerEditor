@@ -186,10 +186,12 @@ public class VideoPlayer extends JFrame {
 				File fPath = pedirCarpeta();
 				if (fPath==null) return;
 				path = fPath.getAbsolutePath();
+				path = path.substring(path.indexOf("test"));
+				path.replaceAll("\\", "/" );
 				ficheros = JOptionPane.showInputDialog( null,
 						"Nombre de ficheros a elegir (* para cualquier cadena)",
 						"Selección de ficheros dentro de la carpeta", JOptionPane.QUESTION_MESSAGE );
-				listaRepVideos.add( path, ficheros );
+				listaRepVideos.addNuevo( path, ficheros );
 				lCanciones.repaint();
 			}
 		});
@@ -373,12 +375,12 @@ public class VideoPlayer extends JFrame {
 	 */
 	public static void main(String[] args) {
 		BaseDeDatos.initBD("VideoPlayer1");
-		// Para probar con otro directorio descomentar estas dos líneas y poner los valores deseados:
-		// (Si se pasan argumentos al main, los usará)
+		
+		// (Si se pasan argumentos al main, los usar�)
 		if (args==null || args.length==0) 
-			args = new String[] { "*Pentatonix*.mp4", "test/res/" };
+			args = new String[] { "*.*", "test/res/" };
 		if (args.length < 2) {
-			// No hay argumentos: selección manual
+			// No hay argumentos: selecci�n manual
 			File fPath = pedirCarpeta();
 			if (fPath==null) return;
 			path = fPath.getAbsolutePath();

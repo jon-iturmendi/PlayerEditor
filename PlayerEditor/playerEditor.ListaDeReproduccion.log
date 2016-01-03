@@ -1,9 +1,11 @@
 	(INFO) 
-	(INFO) 22 de diciembre de 2015 12:34:49 CET
-	(INFO) Añadiendo ficheros con filtro *Pentatonix*.mp4
-	(INFO) expresión regular del filtro: .*Pentatonix.*\.mp4
+	(INFO) 3 de enero de 2016 19:54:09 CET
+	(INFO) Añadiendo ficheros con filtro *.*
+	(INFO) expresión regular del filtro: .*\..*
 		(FINE) Procesando fichero [Official Video] Daft Punk - Pentatonix.mp4
 	(INFO) Añadido vídeo a lista de reproducción: [Official Video] Daft Punk - Pentatonix.mp4
 		(FINE) Procesando fichero [Official Video] I Need Your Love - Pentatonix (Calvin Harris feat. Ellie Goulding Cover).mp4
 	(INFO) Añadido vídeo a lista de reproducción: [Official Video] I Need Your Love - Pentatonix (Calvin Harris feat. Ellie Goulding Cover).mp4
-	(INFO) ficheros añadidos: 2
+		(FINE) Procesando fichero Wildlife.wmv
+	(INFO) Añadido vídeo a lista de reproducción: Wildlife.wmv
+	(INFO) ficheros añadidos: 3

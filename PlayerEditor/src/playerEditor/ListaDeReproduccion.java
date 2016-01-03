@@ -141,6 +141,31 @@ public class ListaDeReproduccion implements ListModel<String> {
 		return ficsAnyadidos;
 	}
 	
+	/**	Anyade un nuevo video a la lista de reproducción y a la BD.
+	 * @param carpetaFicheros	Carpeta donde se encuentra el video.
+	 * @param filtroFicheros	Filtro del nombre del video.
+	 */
+	public void addNuevo(String carpetaFichero, String nombreFichero) {
+		if(carpetaFichero != null ){
+			try {
+				logger.log( Level.INFO, "Añadiendo fichero con nombre " + nombreFichero );
+				BaseDeDatos.getStatement().executeUpdate("INSERT INTO VIDEO VALUES ("
+					+ "0, 'TITULO', 0005, '" + carpetaFichero + "/" + nombreFichero + "', 'CANTANTE', "
+							+ "'COMENTARIO', 0006, 'SUBTITULO')");
+			
+				add(new File (carpetaFichero + nombreFichero));
+				
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+		}
+	}
+	
 	/** Devuelve uno de los ficheros de la lista
 	 * @param posi	Posición del fichero en la lista (de 0 a size()-1)
 	 * @return	Devuelve el fichero en esa posición
