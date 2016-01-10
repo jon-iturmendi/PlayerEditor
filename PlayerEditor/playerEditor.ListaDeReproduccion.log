@@ -1,5 +1,5 @@
 	(INFO) 
-	(INFO) 3 de enero de 2016 19:54:09 CET
+	(INFO) 10 de enero de 2016 2:11:46 CET
 	(INFO) Añadiendo ficheros con filtro *.*
 	(INFO) expresión regular del filtro: .*\..*
 		(FINE) Procesando fichero [Official Video] Daft Punk - Pentatonix.mp4
@@ -8,4 +8,5 @@
 	(INFO) Añadido vídeo a lista de reproducción: [Official Video] I Need Your Love - Pentatonix (Calvin Harris feat. Ellie Goulding Cover).mp4
 		(FINE) Procesando fichero Wildlife.wmv
 	(INFO) Añadido vídeo a lista de reproducción: Wildlife.wmv
+		(FINE) Procesando fichero null
 	(INFO) ficheros añadidos: 3

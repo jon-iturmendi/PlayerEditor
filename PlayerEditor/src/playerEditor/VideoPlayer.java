@@ -183,15 +183,38 @@ public class VideoPlayer extends JFrame {
 		botones.get(BotonDe.ANYADIR.ordinal()).addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				File fPath = pedirCarpeta();
+				File fPath = pedirVideo();
 				if (fPath==null) return;
+				// AQUI APARECE VENTANA DE INSERTAR DATOS DEL VIDEO (CANTANTE Y ¡LBUM)
+//				http://stackoverflow.com/questions/6555040/multiple-input-in-joptionpane-showinputdialog
+				String cantante;
+				String album;
+				JLabel lCantante = new JLabel("Cantante: ");
+				lCantante.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+				JTextField tfCantante = new JTextField(10);
+				JLabel lAlbum = new JLabel("¡lbum: ");
+				lAlbum.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+				JTextField tfAlbum = new JTextField(10);
+				JPanel miPanel = new JPanel(new GridLayout(2,2));
+				miPanel.add(lCantante);
+				miPanel.add(tfCantante);
+				miPanel.add(lAlbum);
+				miPanel.add(tfAlbum);
+				
+				int resultado = JOptionPane.showConfirmDialog(null, miPanel, 
+			               "Introduzca datos del video", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+			    if (resultado == JOptionPane.OK_OPTION) {
+			       cantante = tfCantante.getText();
+			       album = tfAlbum.getText();
+			    }
+				
 				path = fPath.getAbsolutePath();
 				path = path.substring(path.indexOf("test"));
-				path.replaceAll("\\", "/" );
+//				path.replaceAll("\\", "/" );
 				ficheros = JOptionPane.showInputDialog( null,
 						"Nombre de ficheros a elegir (* para cualquier cadena)",
 						"Selecci√≥n de ficheros dentro de la carpeta", JOptionPane.QUESTION_MESSAGE );
-				listaRepVideos.addNuevo( path, ficheros );
+//				listaRepVideos.addNuevo( path, ficheros );
 				lCanciones.repaint();
 			}
 		});
@@ -364,6 +387,18 @@ public class VideoPlayer extends JFrame {
 		else 
 			return null;
 	}
+	
+	// Pide interactivamente un archivo
+		// (null si no se selecciona)
+		private static File pedirVideo() {
+			File dirActual = new File( System.getProperty("user.dir") );
+			JFileChooser chooser = new JFileChooser( dirActual );
+			int returnVal = chooser.showOpenDialog( null );
+			if (returnVal == JFileChooser.APPROVE_OPTION)
+				return chooser.getSelectedFile();
+			else 
+				return null;
+		}
 
 		private static String ficheros;
 		private static String path;
