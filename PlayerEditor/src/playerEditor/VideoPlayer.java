@@ -183,12 +183,17 @@ public class VideoPlayer extends JFrame {
 		botones.get(BotonDe.ANYADIR.ordinal()).addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Declaración de los datos del video.
+				double duracion;
+				String titulo, ruta, cantante, album;
+				int codigo;
+				
+				// Ventana de elección de video a insertar
 				File fPath = pedirVideo();
 				if (fPath==null) return;
-				// AQUI APARECE VENTANA DE INSERTAR DATOS DEL VIDEO (CANTANTE Y ÁLBUM)
-//				http://stackoverflow.com/questions/6555040/multiple-input-in-joptionpane-showinputdialog
-				String cantante;
-				String album;
+				titulo = fPath.getName();
+				
+				//Creación de la ventana que pide el cantante y album.
 				JLabel lCantante = new JLabel("Cantante: ");
 				lCantante.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 				JTextField tfCantante = new JTextField(10);
@@ -201,6 +206,7 @@ public class VideoPlayer extends JFrame {
 				miPanel.add(lAlbum);
 				miPanel.add(tfAlbum);
 				
+				//Se activa la ventana que pide cantante y album
 				int resultado = JOptionPane.showConfirmDialog(null, miPanel, 
 			               "Introduzca datos del video", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 			    if (resultado == JOptionPane.OK_OPTION) {
@@ -208,13 +214,16 @@ public class VideoPlayer extends JFrame {
 			       album = tfAlbum.getText();
 			    }
 				
-				path = fPath.getAbsolutePath();
-				path = path.substring(path.indexOf("test"));
-//				path.replaceAll("\\", "/" );
-				ficheros = JOptionPane.showInputDialog( null,
-						"Nombre de ficheros a elegir (* para cualquier cadena)",
-						"SelecciÃ³n de ficheros dentro de la carpeta", JOptionPane.QUESTION_MESSAGE );
-//				listaRepVideos.addNuevo( path, ficheros );
+			    //Corrección de la ruta del video obtenida.
+			    ruta = fPath.getAbsolutePath();
+			    ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
+			    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
+			    ruta = ruta.replaceAll("\\\\", "/" );
+			    
+			    //Inicialización de los restantes datos del video (duracion y codigo).
+			    
+				
+//				listaRepVideos.addNuevo(  );
 				lCanciones.repaint();
 			}
 		});
