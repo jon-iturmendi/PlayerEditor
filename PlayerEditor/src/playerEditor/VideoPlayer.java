@@ -46,6 +46,11 @@ public class VideoPlayer extends JFrame {
 	private JTextField tfPropCantante = null; // Label para propiedades - cantante
 	private JTextField tfPropComentarios=null;// Label para propiedades - comentarios
 	JPanel pBotonera;                         // Panel botonera (superior)
+	JPanel pContenedor;
+	JPanel pIzquierda;
+	JPanel pDerecha;
+	JPanel pIzquierdaArriba;
+	JPanel pIzquierdaAbajo;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducción)
 	ArrayList<JButton> botones;               // Lista de botones
 	ArrayList<JButton> botonesLR;             // Lista de botones (lista de reproducción)
@@ -88,6 +93,11 @@ public class VideoPlayer extends JFrame {
 		tfPropComentarios = new JTextField( "", 30 );
 		pBotonera = new JPanel();
 		pBotoneraLR = new JPanel();
+		pContenedor = new JPanel();
+		pIzquierda = new JPanel();
+		pDerecha = new JPanel();
+		pIzquierdaArriba = new JPanel();
+		pIzquierdaAbajo = new JPanel();
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
 		// JButton bAtras = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Rewind.png")) );
@@ -157,6 +167,7 @@ public class VideoPlayer extends JFrame {
 		pIzquierda.setLayout( new BorderLayout() );
 		pPropiedades.setVisible( false );
 		pBotoneraLR.setVisible( false );
+		pContenedor.setLayout(new BorderLayout());
 		
 		// Enlace de componentes y contenedores
 		for (JButton boton : botones ) pBotonera.add( boton );
