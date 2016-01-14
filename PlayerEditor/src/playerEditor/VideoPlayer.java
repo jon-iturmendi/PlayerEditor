@@ -6,9 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.channels.FileChannel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
