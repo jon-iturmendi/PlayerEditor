@@ -6,7 +6,11 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.channels.FileChannel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -184,9 +188,12 @@ public class VideoPlayer extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Declaración de los datos del video.
-				double duracion;
-				String titulo, ruta, cantante, album;
-				int codigo;
+				String titulo, ruta, cantante, album, autor,codigo;
+				String[] datos = new String[6];
+				autor = "";
+				codigo = "";
+				cantante = "";
+				album = "";
 				
 				// Ventana de elección de video a insertar
 				File fPath = pedirVideo();
@@ -200,18 +207,24 @@ public class VideoPlayer extends JFrame {
 				JLabel lAlbum = new JLabel("Álbum: ");
 				lAlbum.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 				JTextField tfAlbum = new JTextField(10);
-				JPanel miPanel = new JPanel(new GridLayout(2,2));
+				JLabel lAutor = new JLabel("Autor: ");
+				lAutor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+				JTextField tfAutor = new JTextField(10);
+				JPanel miPanel = new JPanel(new GridLayout(3,2));
 				miPanel.add(lCantante);
 				miPanel.add(tfCantante);
+				miPanel.add(lAutor);
+				miPanel.add(tfAutor);
 				miPanel.add(lAlbum);
 				miPanel.add(tfAlbum);
 				
-				//Se activa la ventana que pide cantante y album
+				//Se activa la ventana que pide cantante, autor y album
 				int resultado = JOptionPane.showConfirmDialog(null, miPanel, 
 			               "Introduzca datos del video", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 			    if (resultado == JOptionPane.OK_OPTION) {
 			       cantante = tfCantante.getText();
 			       album = tfAlbum.getText();
+			       autor = tfAutor.getText();
 			    }
 				
 			    //Corrección de la ruta del video obtenida.
@@ -220,10 +233,26 @@ public class VideoPlayer extends JFrame {
 			    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
 			    ruta = ruta.replaceAll("\\\\", "/" );
 			    
-			    //Inicialización de los restantes datos del video (duracion y codigo).
-			    
+			    //Inicialización del código		    
+				try {
+					ResultSet size = BaseDeDatos.getStatement().executeQuery("SELECT COUNT(RUTA) FROM video;");
+					int val = ((Number) size.getObject(1)).intValue();
+					codigo = "V" + (val+1);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
-//				listaRepVideos.addNuevo(  );
+				//Inserción de los datos en el array
+				datos[0] = autor;
+				datos[1] = titulo;
+				datos[2] = codigo;
+				datos[3] = ruta;
+				datos[4] = cantante;
+				datos[5] = album;
+				
+				//Anyadir todos los datos a la BD y a la lista de reproducción
+     			listaRepVideos.addNuevo( datos );
 				lCanciones.repaint();
 			}
 		});

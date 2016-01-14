@@ -144,8 +144,18 @@ public class ListaDeReproduccion implements ListModel<String> {
 	/**	Anyade un nuevo video a la lista de reproducción y a la BD.
 	 * @param datosVideo	Array en el que se encuentran los datos del video.
 	 */
-	public void addNuevo(Object[] datosVideo) {
+	public void addNuevo(String[] datosVideo) {
+			
+		try {
+			BaseDeDatos.getStatement().executeUpdate("INSERT INTO VIDEO VALUES ('" + datosVideo[0] + "', '" + datosVideo[1] + 
+					"', '" + datosVideo[2] + "', '" + datosVideo[3] + "', '" + datosVideo[4] + "', '" + datosVideo[5] + "', null, null);" );
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		File f = new File (datosVideo[3]);
+		add(f);
 	}
 	
 	/** Devuelve uno de los ficheros de la lista
