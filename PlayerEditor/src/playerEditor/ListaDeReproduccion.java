@@ -148,7 +148,7 @@ public class ListaDeReproduccion implements ListModel<String> {
 			
 		try {
 			BaseDeDatos.getStatement().executeUpdate("INSERT INTO VIDEO VALUES ('" + datosVideo[0] + "', '" + datosVideo[1] + 
-					"', '" + datosVideo[2] + "', '" + datosVideo[3] + "', '" + datosVideo[4] + "', '" + datosVideo[5] + "', null, null);" );
+					"', '" + datosVideo[2] + "', '" + datosVideo[3] + "', '" + datosVideo[4] + "', '" + datosVideo[5] + "', null, '" + datosVideo[6] + "');" );
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -54,6 +54,8 @@ public class VideoPlayer extends JFrame {
 	JLabel lblFin;
 	JButton btnFijar;
 	JButton btnFijar_1;
+	JButton btnAnyadir;
+	JTextField textField;
 	boolean inicioFijado = false;
 	boolean finFijado = false;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducciÃ³n)
@@ -105,6 +107,8 @@ public class VideoPlayer extends JFrame {
 		lblFin = new JLabel("Fin: 00:00:00");
 		btnFijar = new JButton("Fijar");
 		btnFijar_1 = new JButton("Fijar");
+		btnAnyadir = new JButton("Añadir");
+		textField = new JTextField();
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -262,7 +266,6 @@ public class VideoPlayer extends JFrame {
 		flowLayout_1.setAlignment(FlowLayout.LEADING);
 		panel_2.add(panel_6);
 		
-		JTextField textField = new JTextField();
 		panel_6.add(textField);
 		textField.setColumns(120);
 		
@@ -271,8 +274,7 @@ public class VideoPlayer extends JFrame {
 		flowLayout_2.setAlignment(FlowLayout.LEADING);
 		panel_2.add(panel_7);
 		
-		JButton btnAadir = new JButton("A\u00F1adir");
-		panel_7.add(btnAadir);
+		panel_7.add(btnAnyadir);
 		
 		JButton btnImportar = new JButton("Importar...");
 		panel_7.add(btnImportar);
@@ -291,12 +293,13 @@ public class VideoPlayer extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Declaración de los datos del video.
-				String titulo, ruta, cantante, album, autor,codigo;
-				String[] datos = new String[6];
+				String titulo, ruta, cantante, album, autor,codigo, anyoLanzamiento;
+				String[] datos = new String[7];
 				autor = "";
 				codigo = "";
 				cantante = "";
 				album = "";
+				anyoLanzamiento = "";
 				
 				// Ventana de elección de video a insertar
 				File fPath = pedirVideo();
@@ -313,13 +316,18 @@ public class VideoPlayer extends JFrame {
 				JLabel lAutor = new JLabel("Autor: ");
 				lAutor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 				JTextField tfAutor = new JTextField(10);
-				JPanel miPanel = new JPanel(new GridLayout(3,2));
+				JLabel lAnyo = new JLabel("Año lanzamiento: ");
+				lAnyo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+				JTextField tfAnyo = new JTextField(10);
+				JPanel miPanel = new JPanel(new GridLayout(4,2));
 				miPanel.add(lCantante);
 				miPanel.add(tfCantante);
 				miPanel.add(lAutor);
 				miPanel.add(tfAutor);
 				miPanel.add(lAlbum);
 				miPanel.add(tfAlbum);
+				miPanel.add(lAnyo);
+				miPanel.add(tfAnyo);
 				
 				//Se activa la ventana que pide cantante, autor y album
 				int resultado = JOptionPane.showConfirmDialog(null, miPanel, 
@@ -328,6 +336,7 @@ public class VideoPlayer extends JFrame {
 			       cantante = tfCantante.getText();
 			       album = tfAlbum.getText();
 			       autor = tfAutor.getText();
+			       anyoLanzamiento = tfAnyo.getText();
 			    }
 				
 			    //Corrección de la ruta del video obtenida.
@@ -338,8 +347,8 @@ public class VideoPlayer extends JFrame {
 			    
 			    //Inicialización del código		    
 				try {
-					ResultSet size = BaseDeDatos.getStatement().executeQuery("SELECT COUNT(RUTA) FROM video;");
-					int val = ((Number) size.getObject(1)).intValue();
+					ResultSet size = BaseDeDatos.getStatement().executeQuery("select MAX(substr(codigo, 2)) from video;");
+					int val = Integer.parseInt(size.getString(1));
 					codigo = "V" + (val+1);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -353,10 +362,14 @@ public class VideoPlayer extends JFrame {
 				datos[3] = ruta;
 				datos[4] = cantante;
 				datos[5] = album;
+				datos[6] = anyoLanzamiento;
 				
 				//Anyadir todos los datos a la BD y a la lista de reproducción
-     			listaRepVideos.addNuevo( datos );
-				lCanciones.repaint();
+				if (resultado == JOptionPane.OK_OPTION){
+					listaRepVideos.addNuevo( datos );
+					lCanciones.repaint();
+				}
+     			
 			}
 		});
 		// CanciÃ³n anterior
@@ -481,6 +494,13 @@ public class VideoPlayer extends JFrame {
 			}
 			
 		});
+		// Boton añadir linea de subtitulo
+		btnAnyadir.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				anyadirLinea(textField.getText(), lblInicio.getText(), lblFin.getText());
+			}
+		});
 		
 		// Cierre del player cuando se cierra la ventana
 		addWindowListener( new WindowAdapter() {
@@ -576,6 +596,28 @@ public class VideoPlayer extends JFrame {
 			return chooser.getSelectedFile();
 		else 
 			return null;
+	}
+	
+	private void anyadirLinea(String linea, String inicio, String fin){
+		// Comprobar si el video en curso tiene ya algun subtítulo
+		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
+		try {
+			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + f.getAbsolutePath() + "';");
+			System.out.println(rs.getObject(1));
+			// Si no tiene, crear uno nuevo y asociarlo al video
+			// Primero generar un codigo para subtitulo nuevo
+			if (rs.getObject(1)==null){
+				ResultSet size = BaseDeDatos.getStatement().executeQuery("select MAX(substr(cod_sub, 2)) from subtitulo;");
+				int val = Integer.parseInt(size.getString(1));
+				String codigo = "S" + (val+1);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	// Pide interactivamente un archivo
