@@ -2,6 +2,7 @@ package playerEditor;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.ColorModel;
 
 import javax.swing.*;
 
@@ -46,11 +47,9 @@ public class VideoPlayer extends JFrame {
 	private JTextField tfPropCantante = null; // Label para propiedades - cantante
 	private JTextField tfPropComentarios=null;// Label para propiedades - comentarios
 	JPanel pBotonera;                         // Panel botonera (superior)
-	JPanel pContenedor;
-	JPanel pIzquierda;
-	JPanel pDerecha;
+	JPanel pDerechaArriba;
 	JPanel pIzquierdaArriba;
-	JPanel pIzquierdaAbajo;
+	JPanel pAbajo;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducción)
 	ArrayList<JButton> botones;               // Lista de botones
 	ArrayList<JButton> botonesLR;             // Lista de botones (lista de reproducción)
@@ -93,11 +92,10 @@ public class VideoPlayer extends JFrame {
 		tfPropComentarios = new JTextField( "", 30 );
 		pBotonera = new JPanel();
 		pBotoneraLR = new JPanel();
-		pContenedor = new JPanel();
-		pIzquierda = new JPanel();
-		pDerecha = new JPanel();
+		pDerechaArriba = new JPanel();
 		pIzquierdaArriba = new JPanel();
-		pIzquierdaAbajo = new JPanel();
+		pAbajo = new JPanel();
+
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
 		// JButton bAtras = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Rewind.png")) );
@@ -153,7 +151,7 @@ public class VideoPlayer extends JFrame {
         	boton.setBorder(null);             // No considerar el borde (el botón se hace sólo del tamaño del gráfico)
         	indBoton++;
         }
-        lMensaje2.setForeground( Color.white );
+        lMensaje2.setForeground( Color.black);
         lMensaje2.setFont( new Font( "Arial", Font.BOLD, 18 ));
 		setTitle("PlayerEditor");
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
@@ -167,7 +165,13 @@ public class VideoPlayer extends JFrame {
 		pIzquierda.setLayout( new BorderLayout() );
 		pPropiedades.setVisible( false );
 		pBotoneraLR.setVisible( false );
-		pContenedor.setLayout(new BorderLayout());
+		pIzquierdaArriba.setLayout(new BorderLayout());
+		pAbajo.setBackground(new Color(245, 8, 8));
+		pDerechaArriba.setBackground(new Color (8, 150, 245));
+		pAbajo.setPreferredSize(new Dimension(10, 160));
+		pDerechaArriba.setPreferredSize(new Dimension(600, 70));
+
+		
 		
 		// Enlace de componentes y contenedores
 		for (JButton boton : botones ) pBotonera.add( boton );
@@ -186,10 +190,15 @@ public class VideoPlayer extends JFrame {
 		pIzquierda.add( spLCanciones, BorderLayout.CENTER );
 		pIzquierda.add( pBotoneraLR, BorderLayout.SOUTH );
 
-		getContentPane().add( mediaPlayerComponent, BorderLayout.CENTER );
-		getContentPane().add( pBotonera, BorderLayout.NORTH );
-		getContentPane().add( pInferior, BorderLayout.SOUTH );
-		getContentPane().add( pIzquierda, BorderLayout.WEST );
+		pIzquierdaArriba.add( mediaPlayerComponent, BorderLayout.CENTER );
+		pIzquierdaArriba.add( pBotonera, BorderLayout.NORTH );
+		pIzquierdaArriba.add( pInferior, BorderLayout.SOUTH );
+		pIzquierdaArriba.add( pIzquierda, BorderLayout.WEST );
+		getContentPane().add(pIzquierdaArriba, BorderLayout.CENTER);
+		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
+		getContentPane().add(pAbajo, BorderLayout.SOUTH);
+		pDerechaArriba.setVisible(false);
+		pAbajo.setVisible(false);
 		
 		// Escuchadores
 		// Añadir ficheros
@@ -313,12 +322,20 @@ public class VideoPlayer extends JFrame {
 					mediaPlayer.setFullScreen(false);
 			        // Añadido para dejar más espacio en la pantalla maximizada
 					pIzquierda.setVisible( true );
-					pBotonera.setBackground( Color.LIGHT_GRAY );
+					pBotonera.setBackground(new Color(238,238,238) );
+					cbAleatorio.setBackground(new Color(238,238,238));
+					cbAleatorio.setForeground(Color.BLACK);
+					lMensaje2.setForeground(Color.BLACK);
+					lMensaje.setForeground(Color.BLACK);
 				} else {
 					mediaPlayer.setFullScreen(true);
 			        // Añadido para dejar más espacio en la pantalla maximizada
 					pIzquierda.setVisible( false );
 					pBotonera.setBackground( Color.BLACK );
+					cbAleatorio.setBackground(Color.BLACK);
+					cbAleatorio.setForeground(Color.WHITE);
+					lMensaje2.setForeground(Color.WHITE);
+					lMensaje.setForeground(Color.WHITE);
 				}
 			}
 		});
@@ -348,6 +365,14 @@ public class VideoPlayer extends JFrame {
 					// milisegsSalto = Math.round( milisegsSalto * porcentajeSalto );
 					// mediaPlayer.setTime( milisegsSalto );
 				}
+			}
+		});
+		// Apertura o cierre del editor de subt�tulos
+		botones.get(BotonDe.EDITAR.ordinal()).addMouseListener( new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				pDerechaArriba.setVisible(!pDerechaArriba.isVisible());
+				pAbajo.setVisible(!pAbajo.isVisible());
 			}
 		});
 		// Cierre del player cuando se cierra la ventana
@@ -486,6 +511,7 @@ public class VideoPlayer extends JFrame {
 				@Override
 				public void run() {
 					miVentana = new VideoPlayer();
+					miVentana.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					miVentana.setVisible( true );
 					miVentana.listaRepVideos.add( path, ficheros );
 					miVentana.listaRepVideos.irAPrimero();
