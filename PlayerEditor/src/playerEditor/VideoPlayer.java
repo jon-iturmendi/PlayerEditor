@@ -50,6 +50,12 @@ public class VideoPlayer extends JFrame {
 	JPanel pDerechaArriba;
 	JPanel pIzquierdaArriba;
 	JPanel pAbajo;
+	JLabel lblInicio;
+	JLabel lblFin;
+	JButton btnFijar;
+	JButton btnFijar_1;
+	boolean inicioFijado = false;
+	boolean finFijado = false;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducciÃ³n)
 	ArrayList<JButton> botones;               // Lista de botones
 	ArrayList<JButton> botonesLR;             // Lista de botones (lista de reproducciÃ³n)
@@ -95,6 +101,10 @@ public class VideoPlayer extends JFrame {
 		pDerechaArriba = new JPanel();
 		pIzquierdaArriba = new JPanel();
 		pAbajo = new JPanel();
+		lblInicio = new JLabel("Inicio: 00:00:00");
+		lblFin = new JLabel("Fin: 00:00:00");
+		btnFijar = new JButton("Fijar");
+		btnFijar_1 = new JButton("Fijar");
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -155,7 +165,7 @@ public class VideoPlayer extends JFrame {
         lMensaje2.setFont( new Font( "Arial", Font.BOLD, 18 ));
 		setTitle("PlayerEditor");
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-		setSize( 800, 600 );
+		setSize( 1300, 700 );
 		lCanciones.setCellRenderer( miListRenderer );
 		spLCanciones = new JScrollPane( lCanciones );
 		spLCanciones.setPreferredSize( new Dimension( 200,  5000 ) );  // Coge el ancho de 200 pÃ­xels en lugar del del string mÃ¡s largo
@@ -196,7 +206,7 @@ public class VideoPlayer extends JFrame {
 		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
 		pDerechaArriba.setVisible(false);
 		
-		//Creación y configuración del panel de abajo del editor
+		//Creación, configuración e inserción del panel inferior del editor
 		
 		pAbajo.setBackground(Color.LIGHT_GRAY);
 		pAbajo.setLayout(new BoxLayout(pAbajo, BoxLayout.Y_AXIS));
@@ -215,11 +225,9 @@ public class VideoPlayer extends JFrame {
 		panel_5.add(panel_4);
 		panel_4.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblInicio = new JLabel("Inicio: <00:00>");
 		panel_4.add(lblInicio);
 		lblInicio.setHorizontalAlignment(SwingConstants.TRAILING);
 		
-		JLabel lblFin = new JLabel("Fin: <00:00>");
 		panel_4.add(lblFin);
 		lblFin.setHorizontalAlignment(SwingConstants.TRAILING);
 		
@@ -229,10 +237,7 @@ public class VideoPlayer extends JFrame {
 		panel_5.add(panel_8);
 		panel_8.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JButton btnFijar = new JButton("Fijar");
 		panel_8.add(btnFijar);
-		
-		JButton btnFijar_1 = new JButton("Fijar");
 		panel_8.add(btnFijar_1);
 		
 		JPanel panel_2 = new JPanel();
@@ -275,6 +280,10 @@ public class VideoPlayer extends JFrame {
 		pAbajo.setPreferredSize(new Dimension(10,160));
 		pAbajo.setVisible(false);
 		getContentPane().add(pAbajo, BorderLayout.SOUTH);
+		
+		//Creación, configuración e inserción del panel derecho del editor
+		
+		
 		
 		// Escuchadores
 		// AÃ±adir ficheros
@@ -361,6 +370,8 @@ public class VideoPlayer extends JFrame {
 					listaRepVideos.irAAnterior();
 				}
 				lanzaVideo();
+				inicioFijado = false;
+				finFijado = false;
 			}
 		});
 		// Pausa / Play
@@ -388,6 +399,8 @@ public class VideoPlayer extends JFrame {
 					listaRepVideos.irASiguiente();
 				}
 				lanzaVideo();
+				inicioFijado = false;
+				finFijado = false;
 			}
 		});
 		// Maximizar / desmaximizar
@@ -424,6 +437,8 @@ public class VideoPlayer extends JFrame {
 		            paraVideo();
 		            listaRepVideos.irA( posi );
 		            lanzaVideo();
+		            inicioFijado = false;
+					finFijado = false;
 		        }
 			}
 		});
@@ -451,6 +466,22 @@ public class VideoPlayer extends JFrame {
 				pAbajo.setVisible(!pAbajo.isVisible());
 			}
 		});
+		// Botones fijar
+		btnFijar.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				inicioFijado = true;
+			}
+			
+		});
+		btnFijar_1.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				finFijado = true;
+			}
+			
+		});
+		
 		// Cierre del player cuando se cierra la ventana
 		addWindowListener( new WindowAdapter() {
 			@Override
@@ -468,6 +499,8 @@ public class VideoPlayer extends JFrame {
 				public void finished(MediaPlayer mediaPlayer) {
 					listaRepVideos.irASiguiente();
 					lanzaVideo();
+					inicioFijado = false;
+					finFijado = false;
 				}
 				// Hay error en el formato o en el fichero del vÃ­deo
 				@Override
@@ -476,6 +509,8 @@ public class VideoPlayer extends JFrame {
 					listaRepVideos.irASiguiente();
 					lanzaVideo();
 					lCanciones.repaint();
+					inicioFijado = false;
+					finFijado = false;
 				}
 				// Evento que ocurre al cambiar el tiempo (cada 3 dÃ©cimas de segundo aproximadamente
 			    @Override
@@ -490,6 +525,13 @@ public class VideoPlayer extends JFrame {
 					mediaPlayer.getLength()) );
 			pbVideo.repaint();
 			lMensaje2.setText( formatoHora.format( new Date(mediaPlayer.getTime()-3600000L) ) );
+			if (!inicioFijado){
+				lblInicio.setText( "Inicio: " + formatoHora.format( new Date(mediaPlayer.getTime()-3600000L) ));
+			}
+			if (!finFijado){
+				lblFin.setText("Fin: " + formatoHora.format( new Date(mediaPlayer.getTime()-3600000L) ));
+			}
+				
 		}
 
 	//
