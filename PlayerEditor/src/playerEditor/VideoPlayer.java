@@ -166,10 +166,8 @@ public class VideoPlayer extends JFrame {
 		pPropiedades.setVisible( false );
 		pBotoneraLR.setVisible( false );
 		pIzquierdaArriba.setLayout(new BorderLayout());
-		pAbajo.setBackground(new Color(245, 8, 8));
 		pDerechaArriba.setBackground(new Color (8, 150, 245));
-		pAbajo.setPreferredSize(new Dimension(10, 160));
-		pDerechaArriba.setPreferredSize(new Dimension(600, 70));
+		pDerechaArriba.setPreferredSize(new Dimension(550, 70));
 
 		
 		
@@ -196,9 +194,87 @@ public class VideoPlayer extends JFrame {
 		pIzquierdaArriba.add( pIzquierda, BorderLayout.WEST );
 		getContentPane().add(pIzquierdaArriba, BorderLayout.CENTER);
 		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
-		getContentPane().add(pAbajo, BorderLayout.SOUTH);
 		pDerechaArriba.setVisible(false);
+		
+		//Creación y configuración del panel de abajo del editor
+		
+		pAbajo.setBackground(Color.LIGHT_GRAY);
+		pAbajo.setLayout(new BoxLayout(pAbajo, BoxLayout.Y_AXIS));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setMaximumSize(new Dimension(32767, 40));
+		panel_1.setPreferredSize(new Dimension(10, 40));
+		pAbajo.add(panel_1);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		
+		JPanel panel_5 = new JPanel();
+		panel_1.add(panel_5);
+		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.X_AXIS));
+		
+		JPanel panel_4 = new JPanel();
+		panel_5.add(panel_4);
+		panel_4.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel lblInicio = new JLabel("Inicio: <00:00>");
+		panel_4.add(lblInicio);
+		lblInicio.setHorizontalAlignment(SwingConstants.TRAILING);
+		
+		JLabel lblFin = new JLabel("Fin: <00:00>");
+		panel_4.add(lblFin);
+		lblFin.setHorizontalAlignment(SwingConstants.TRAILING);
+		
+		JPanel panel_8 = new JPanel();
+		panel_8.setPreferredSize(new Dimension(100, 10));
+		panel_8.setMaximumSize(new Dimension(20, 32767));
+		panel_5.add(panel_8);
+		panel_8.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JButton btnFijar = new JButton("Fijar");
+		panel_8.add(btnFijar);
+		
+		JButton btnFijar_1 = new JButton("Fijar");
+		panel_8.add(btnFijar_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setMinimumSize(new Dimension(10, 30));
+		panel_2.setBounds(new Rectangle(0, 0, 0, 5));
+		panel_2.setPreferredSize(new Dimension(10, 5));
+		pAbajo.add(panel_2);
+		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setMaximumSize(new Dimension(32767, 30));
+		panel_3.setPreferredSize(new Dimension(10, 20));
+		panel_2.add(panel_3);
+		panel_3.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblIntroducirFrase_1 = new JLabel("  Introducir frase:");
+		panel_3.add(lblIntroducirFrase_1, BorderLayout.SOUTH);
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setMaximumSize(new Dimension(32767, 20));
+		FlowLayout flowLayout_1 = (FlowLayout) panel_6.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEADING);
+		panel_2.add(panel_6);
+		
+		JTextField textField = new JTextField();
+		panel_6.add(textField);
+		textField.setColumns(120);
+		
+		JPanel panel_7 = new JPanel();
+		FlowLayout flowLayout_2 = (FlowLayout) panel_7.getLayout();
+		flowLayout_2.setAlignment(FlowLayout.LEADING);
+		panel_2.add(panel_7);
+		
+		JButton btnAadir = new JButton("A\u00F1adir");
+		panel_7.add(btnAadir);
+		
+		JButton btnImportar = new JButton("Importar...");
+		panel_7.add(btnImportar);
+		
+		pAbajo.setPreferredSize(new Dimension(10,160));
 		pAbajo.setVisible(false);
+		getContentPane().add(pAbajo, BorderLayout.SOUTH);
 		
 		// Escuchadores
 		// AÃ±adir ficheros
