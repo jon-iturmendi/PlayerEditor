@@ -601,17 +601,38 @@ public class VideoPlayer extends JFrame {
 	private void anyadirLinea(String linea, String inicio, String fin){
 		// Comprobar si el video en curso tiene ya algun subtítulo
 		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
+		String ruta = f.getAbsolutePath();
+		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
+	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
+	    ruta = ruta.replaceAll("\\\\", "/" );
 		try {
-			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + f.getAbsolutePath() + "';");
-			System.out.println(rs.getObject(1));
+			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + ruta + "';");
+			System.out.println(rs.getString(1));
+			String codConsulta = rs.getString(1);
+			ResultSet rsTitulo = BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM VIDEO WHERE ruta = '" + ruta + "';");
+			String tituloConsulta = rsTitulo.getString(1);
 			// Si no tiene, crear uno nuevo y asociarlo al video
 			// Primero generar un codigo para subtitulo nuevo
-			if (rs.getObject(1)==null){
+			if (codConsulta==null){
 				ResultSet size = BaseDeDatos.getStatement().executeQuery("select MAX(substr(cod_sub, 2)) from subtitulo;");
 				int val = Integer.parseInt(size.getString(1));
 				String codigo = "S" + (val+1);
-				
+				// Asociar al video en curso el nuevo codigo de subtitulo
+				BaseDeDatos.getStatement().executeUpdate("UPDATE VIDEO SET cod_sub = '" + codigo + "' WHERE ruta='" + ruta+"';");
+				// Crear nuevo subtitulo en la tabla subtitulo
+				BaseDeDatos.getStatement().executeUpdate("INSERT INTO SUBTITULO VALUES ('"+codigo+"', '"+ tituloConsulta+"', '');");
 			}
+			ResultSet rsContenido = BaseDeDatos.getStatement().executeQuery("SELECT contenido FROM subtitulo WHERE cod_sub='"+codConsulta+"';");
+			String contenido = rsContenido.getString(1);
+			String contenidoFinal;
+			int ultimoSub;
+			// Si el subtitulo está aun vacio, ultimoSub sera 0
+			if (contenido.equals("")){
+				ultimoSub = 0;
+			}
+			
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
