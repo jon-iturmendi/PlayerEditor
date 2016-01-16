@@ -43,6 +43,7 @@ public class VideoPlayer extends JFrame {
 	private JList<String> lCanciones = null;  // Lista vertical de vídeos del player
 	private JProgressBar pbVideo = null;      // Barra de progreso del vídeo en curso
 	private JCheckBox cbAleatorio = null;     // Checkbox de reproducción aleatoria
+	private JCheckBox cbMostrarSub = null;
 	private JLabel lMensaje = null;           // Label para mensaje de reproducción
 	private JLabel lMensaje2 = null;          // Label para mensaje de reproducción 2
 	private JTextField tfPropTitulo = null;   // Label para propiedades - título
@@ -97,6 +98,7 @@ public class VideoPlayer extends JFrame {
 		lCanciones = new JList<String>( listaRepVideos );
 		pbVideo = new JProgressBar( 0, 10000 );
 		cbAleatorio = new JCheckBox("Rep. aleatoria");
+		cbMostrarSub = new JCheckBox("Mostrar subt�tulos");
 		lMensaje = new JLabel( "" );
 		lMensaje2 = new JLabel( "" );
 		tfPropTitulo = new JTextField( "", 10 );
@@ -197,6 +199,7 @@ public class VideoPlayer extends JFrame {
 		pBotonera.add( lMensaje2 );
 		pBotonera.add( cbAleatorio );
 		pBotonera.add( lMensaje );
+		pBotonera.add( cbMostrarSub );
 		pPropiedades.add( new JLabel("Tit:") );
 		pPropiedades.add( tfPropTitulo );
 		pPropiedades.add( new JLabel("Cant:") );
@@ -448,6 +451,8 @@ public class VideoPlayer extends JFrame {
 					pBotonera.setBackground(new Color(238,238,238) );
 					cbAleatorio.setBackground(new Color(238,238,238));
 					cbAleatorio.setForeground(Color.BLACK);
+					cbMostrarSub.setBackground(new Color(238,238,238));
+					cbMostrarSub.setForeground(Color.BLACK);
 					lMensaje2.setForeground(Color.BLACK);
 					lMensaje.setForeground(Color.BLACK);
 				} else {
@@ -457,6 +462,8 @@ public class VideoPlayer extends JFrame {
 					pBotonera.setBackground( Color.BLACK );
 					cbAleatorio.setBackground(Color.BLACK);
 					cbAleatorio.setForeground(Color.WHITE);
+					cbMostrarSub.setBackground(Color.BLACK);
+					cbMostrarSub.setForeground(Color.WHITE);
 					lMensaje2.setForeground(Color.WHITE);
 					lMensaje.setForeground(Color.WHITE);
 				}
