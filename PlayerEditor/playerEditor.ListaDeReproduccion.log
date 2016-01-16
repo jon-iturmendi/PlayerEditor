@@ -1,5 +1,5 @@
 	(INFO) 
-	(INFO) 14 de enero de 2016 20:15:13 CET
+	(INFO) 16 de enero de 2016 20:38:06 CET
 	(INFO) Añadiendo ficheros con filtro *.*
 	(INFO) expresión regular del filtro: .*\..*
 		(FINE) Procesando fichero [Official Video] Daft Punk - Pentatonix.mp4
@@ -10,4 +10,8 @@
 	(INFO) Añadido vídeo a lista de reproducción: Wildlife.wmv
 		(FINE) Procesando fichero [Official Video] Rather Be - Pentatonix (Clean Bandit Cover).mp4
 	(INFO) Añadido vídeo a lista de reproducción: [Official Video] Rather Be - Pentatonix (Clean Bandit Cover).mp4
-	(INFO) ficheros añadidos: 4
+		(FINE) Procesando fichero Pentatonix_-_Radioactive_HD_LYRICS.mp4
+	(INFO) Añadido vídeo a lista de reproducción: Pentatonix_-_Radioactive_HD_LYRICS.mp4
+		(FINE) Procesando fichero Pentatonix_-_We_Are_Young_LYRICS_HD_VIDEO-1.mp4
+	(INFO) Añadido vídeo a lista de reproducción: Pentatonix_-_We_Are_Young_LYRICS_HD_VIDEO-1.mp4
+	(INFO) ficheros añadidos: 6

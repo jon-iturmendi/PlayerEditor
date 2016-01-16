@@ -62,6 +62,7 @@ public class VideoPlayer extends JFrame {
 	JTextField textField;
 	JTextArea textAreaSubtitulos;
 	JButton guardarCambios;
+	JLabel subtitulo;
 	boolean inicioFijado = false;
 	boolean finFijado = false;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducción)
@@ -119,6 +120,7 @@ public class VideoPlayer extends JFrame {
 		btnImportar = new JButton("Importar...");
 		textAreaSubtitulos = new JTextArea();
 		guardarCambios = new JButton("Guardar cambios");
+		subtitulo = new JLabel("");
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -602,6 +604,51 @@ public class VideoPlayer extends JFrame {
 				lblFin.setText("Fin: " + formatoHora.format( new Date(mediaPlayer.getTime()-3600000L) ));
 			}
 				
+		}
+		
+		private void actualizaSubtitulo(){
+			String texto = "";
+			if (textAreaSubtitulos.getText()!=null){
+				texto = textAreaSubtitulos.getText();
+			}
+			String busca = "-->";
+			String frase = "";
+			String inicio = "";
+			String fin = "";
+			String actual = lMensaje.getText();
+			String textoVariable = texto;
+			boolean encontrado = false;
+			// Contar cuentas --> hay en el texto para saber cuantas frases de subtitulo habra
+			int contador = 0;
+			while (texto.indexOf(busca) > -1) {
+			      texto = texto.substring(texto.indexOf(
+			        "-->")+busca.length(),texto.length());
+			      contador++; 
+			}
+			int numSub = 1;
+			while ((numSub<=contador)&&(encontrado==false)){
+				inicio = textoVariable.substring(textoVariable.indexOf(busca)-13, textoVariable.indexOf(busca)-5 );
+				fin = textoVariable.substring(textoVariable.indexOf(busca)+4, textoVariable.indexOf(busca)+12 );
+				//Comparacion inicio fin
+				inicio = inicio.replaceAll(":", "");
+				fin = fin.replaceAll(":", "");
+				actual = actual.replaceAll(":", "");
+				//Si la comparacion es true, setText() y encontrado = true
+				if ((Integer.parseInt(actual)>=Integer.parseInt(inicio))&&(Integer.parseInt(actual)<=Integer.parseInt(fin))){
+					frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf('\n', 18));
+					lMensaje.setText(frase);
+					encontrado=true;
+				} else {
+					numSub++;
+				}
+				
+				textoVariable = textoVariable.substring(textoVariable.indexOf(busca)+3);
+				numSub++;
+			}
+			
+			
+			
+			
 		}
 
 	//
