@@ -588,6 +588,7 @@ public class VideoPlayer extends JFrame {
 			    @Override
 			    public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
 			    	visualizaTiempoRep();
+			    	actualizaSubtitulo();
 			    }
 		});
 	}
@@ -615,10 +616,10 @@ public class VideoPlayer extends JFrame {
 			String frase = "";
 			String inicio = "";
 			String fin = "";
-			String actual = lMensaje.getText();
+			String actual = lMensaje2.getText();
 			String textoVariable = texto;
 			boolean encontrado = false;
-			// Contar cuentas --> hay en el texto para saber cuantas frases de subtitulo habra
+			// Contar cuantas --> hay en el texto para saber cuantas frases de subtitulo habra
 			int contador = 0;
 			while (texto.indexOf(busca) > -1) {
 			      texto = texto.substring(texto.indexOf(
@@ -635,15 +636,21 @@ public class VideoPlayer extends JFrame {
 				actual = actual.replaceAll(":", "");
 				//Si la comparacion es true, setText() y encontrado = true
 				if ((Integer.parseInt(actual)>=Integer.parseInt(inicio))&&(Integer.parseInt(actual)<=Integer.parseInt(fin))){
-					frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf('\n', 18));
-					lMensaje.setText(frase);
+					if(numSub==1){
+						frase = textoVariable.substring(textoVariable.indexOf(busca)+17, textoVariable.indexOf("\n\n"));
+					}else{
+						frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf("\n\n"));
+					}
+					
+					subtitulo.setText(frase);
+					subtitulo.repaint();
+//					System.out.println(frase);
 					encontrado=true;
 				} else {
 					numSub++;
+					textoVariable = textoVariable.substring(textoVariable.indexOf(busca)+3);
 				}
 				
-				textoVariable = textoVariable.substring(textoVariable.indexOf(busca)+3);
-				numSub++;
 			}
 			
 			
