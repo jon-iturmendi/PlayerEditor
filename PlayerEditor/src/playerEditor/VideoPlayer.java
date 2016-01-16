@@ -59,6 +59,7 @@ public class VideoPlayer extends JFrame {
 	JButton btnAnyadir;
 	JButton btnImportar; 
 	JTextField textField;
+	JTextArea textAreaSubtitulos;
 	boolean inicioFijado = false;
 	boolean finFijado = false;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducciÃ³n)
@@ -113,6 +114,7 @@ public class VideoPlayer extends JFrame {
 		btnAnyadir = new JButton("Añadir");
 		textField = new JTextField();
 		btnImportar = new JButton("Importar...");
+		textAreaSubtitulos = new JTextArea();
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -184,8 +186,8 @@ public class VideoPlayer extends JFrame {
 		pPropiedades.setVisible( false );
 		pBotoneraLR.setVisible( false );
 		pIzquierdaArriba.setLayout(new BorderLayout());
-		pDerechaArriba.setBackground(new Color (8, 150, 245));
-		pDerechaArriba.setPreferredSize(new Dimension(550, 70));
+//		pDerechaArriba.setBackground(new Color (8, 150, 245));
+//		pDerechaArriba.setPreferredSize(new Dimension(550, 70));
 
 		
 		
@@ -211,11 +213,10 @@ public class VideoPlayer extends JFrame {
 		pIzquierdaArriba.add( pInferior, BorderLayout.SOUTH );
 		pIzquierdaArriba.add( pIzquierda, BorderLayout.WEST );
 		getContentPane().add(pIzquierdaArriba, BorderLayout.CENTER);
-		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
-		pDerechaArriba.setVisible(false);
+//		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
+//		pDerechaArriba.setVisible(false);
 		
 		//Creación, configuración e inserción del panel inferior del editor
-		
 		pAbajo.setBackground(Color.LIGHT_GRAY);
 		pAbajo.setLayout(new BoxLayout(pAbajo, BoxLayout.Y_AXIS));
 		
@@ -286,7 +287,24 @@ public class VideoPlayer extends JFrame {
 		getContentPane().add(pAbajo, BorderLayout.SOUTH);
 		
 		//Creación, configuración e inserción del panel derecho del editor
+		pDerechaArriba.setDoubleBuffered(false);
+		pDerechaArriba.setAutoscrolls(true);
+		pDerechaArriba.setLayout(new BorderLayout(0, 0));
+		pDerechaArriba.setBackground(new Color(182,182,182));
 		
+		JLabel lblSubtitulos = new JLabel("Subtítulos:");
+		
+		lblSubtitulos.setHorizontalAlignment(SwingConstants.CENTER);
+		pDerechaArriba.add(lblSubtitulos, BorderLayout.NORTH);
+		JScrollPane escribir = new JScrollPane();
+		pDerechaArriba.add(escribir);
+		
+		escribir.setViewportView(textAreaSubtitulos);
+		textAreaSubtitulos.setEditable(false);
+		pDerechaArriba.setVisible(false);
+		pDerechaArriba.setPreferredSize(new Dimension(500,200));
+//		textArea.setText(leerSubtitulos());
+		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
 		
 		
 		// Escuchadores
@@ -387,6 +405,7 @@ public class VideoPlayer extends JFrame {
 				lanzaVideo();
 				inicioFijado = false;
 				finFijado = false;
+				
 			}
 		});
 		// Pausa / Play
@@ -501,6 +520,11 @@ public class VideoPlayer extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				anyadirLinea(textField.getText(), (lblInicio.getText()).substring(8), (lblFin.getText()).substring(5));
+				textAreaSubtitulos.setText(leerSubtitulos());
+				inicioFijado = false;
+				finFijado = false;
+				visualizaTiempoRep();
+				textField.setText("");
 			}
 		});
 		// Boton importar subtitulo
@@ -508,6 +532,7 @@ public class VideoPlayer extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				importarSubtitulo();
+				textAreaSubtitulos.setText(leerSubtitulos());
 			}
 		});
 		
@@ -589,6 +614,7 @@ public class VideoPlayer extends JFrame {
 			lMensaje.repaint();
 			lCanciones.setSelectedIndex( listaRepVideos.getFicSeleccionado() );
 			lCanciones.ensureIndexIsVisible( listaRepVideos.getFicSeleccionado() );  // Asegura que se vea en pantalla
+			textAreaSubtitulos.setText(leerSubtitulos());
 		} else {
 			lCanciones.setSelectedIndices( new int[] {} );
 		}
@@ -719,6 +745,28 @@ public class VideoPlayer extends JFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String leerSubtitulos(){
+		String texto = null;
+		ResultSet rs;
+    	ResultSet rsContenido;
+    	File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
+		String ruta = f.getAbsolutePath();
+		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
+	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
+	    ruta = ruta.replaceAll("\\\\", "/" );
+		try {
+			rs =BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM video WHERE ruta ='"+ ruta +"';");
+			String titulo = rs.getString(1);
+			rsContenido=BaseDeDatos.getStatement().executeQuery("SELECT contenido FROM subtitulo WHERE titulo ='"+ titulo +"';");
+			texto = rsContenido.getString(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return texto;
 	}
 	
 	// Pide interactivamente un archivo
