@@ -61,6 +61,7 @@ public class VideoPlayer extends JFrame {
 	JButton btnImportar; 
 	JTextField textField;
 	JTextArea textAreaSubtitulos;
+	JButton guardarCambios;
 	boolean inicioFijado = false;
 	boolean finFijado = false;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducción)
@@ -117,6 +118,7 @@ public class VideoPlayer extends JFrame {
 		textField = new JTextField();
 		btnImportar = new JButton("Importar...");
 		textAreaSubtitulos = new JTextArea();
+		guardarCambios = new JButton("Guardar cambios");
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -300,13 +302,13 @@ public class VideoPlayer extends JFrame {
 		lblSubtitulos.setHorizontalAlignment(SwingConstants.CENTER);
 		pDerechaArriba.add(lblSubtitulos, BorderLayout.NORTH);
 		JScrollPane escribir = new JScrollPane();
-		pDerechaArriba.add(escribir);
+		pDerechaArriba.add(escribir, BorderLayout.CENTER);
+		pDerechaArriba.add(guardarCambios, BorderLayout.SOUTH);
 		
 		escribir.setViewportView(textAreaSubtitulos);
-		textAreaSubtitulos.setEditable(false);
+		textAreaSubtitulos.setEditable(true);
 		pDerechaArriba.setVisible(false);
 		pDerechaArriba.setPreferredSize(new Dimension(500,200));
-//		textArea.setText(leerSubtitulos());
 		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
 		
 		
@@ -542,7 +544,14 @@ public class VideoPlayer extends JFrame {
 				textAreaSubtitulos.setText(leerSubtitulos());
 			}
 		});
-		
+		// Boton guardar cambios
+		guardarCambios.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				guardarCambios();
+				textAreaSubtitulos.setText(leerSubtitulos());
+			}
+		});
 		// Cierre del player cuando se cierra la ventana
 		addWindowListener( new WindowAdapter() {
 			@Override
@@ -621,7 +630,10 @@ public class VideoPlayer extends JFrame {
 			lMensaje.repaint();
 			lCanciones.setSelectedIndex( listaRepVideos.getFicSeleccionado() );
 			lCanciones.ensureIndexIsVisible( listaRepVideos.getFicSeleccionado() );  // Asegura que se vea en pantalla
-			textAreaSubtitulos.setText(leerSubtitulos());
+			if (leerSubtitulos()!=null){
+				textAreaSubtitulos.setText(leerSubtitulos());
+			}
+			
 		} else {
 			lCanciones.setSelectedIndices( new int[] {} );
 		}
@@ -681,6 +693,7 @@ public class VideoPlayer extends JFrame {
 			String sNumero = substring.substring(substring.lastIndexOf('\n') + 1);
 			numeroSub = (Integer.parseInt(sNumero)) + 1;}
 			
+			linea = linea.replaceAll("'", "''");
 			contenidoFinal = contenido + Integer.toString(numeroSub) + "\n" + inicio + ",000 --> " + fin + ",000\n" + linea + "\n\n";
 			BaseDeDatos.getStatement().executeUpdate("UPDATE subtitulo SET contenido='" + contenidoFinal + "' WHERE cod_sub='"+codConsulta+"';");
 			inicioFijado = false;
@@ -774,6 +787,39 @@ public class VideoPlayer extends JFrame {
 		}
 		
 		return texto;
+	}
+	
+	public void guardarCambios(){
+		String contenidoNuevo = textAreaSubtitulos.getText();
+		contenidoNuevo = contenidoNuevo.replaceAll("'", "''");
+		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
+		String ruta = f.getAbsolutePath();
+		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
+	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
+	    ruta = ruta.replaceAll("\\\\", "/" );
+		try {
+			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + ruta + "';");
+			System.out.println(rs.getString(1));
+			String codConsulta = rs.getString(1);
+			ResultSet rsTitulo = BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM VIDEO WHERE ruta = '" + ruta + "';");
+			String tituloConsulta = rsTitulo.getString(1);
+			// Si no tiene, crear uno nuevo y asociarlo al video
+			// Primero generar un codigo para subtitulo nuevo
+			if (codConsulta==null){
+				ResultSet size = BaseDeDatos.getStatement().executeQuery("select MAX(substr(cod_sub, 2)) from subtitulo;");
+				int val = Integer.parseInt(size.getString(1));
+				codConsulta = "S" + (val+1);
+				// Asociar al video en curso el nuevo codigo de subtitulo
+				BaseDeDatos.getStatement().executeUpdate("UPDATE VIDEO SET cod_sub = '" + codConsulta + "' WHERE ruta='" + ruta+"';");
+				// Crear nuevo subtitulo en la tabla subtitulo
+				BaseDeDatos.getStatement().executeUpdate("INSERT INTO SUBTITULO VALUES ('"+codConsulta+"', '"+ tituloConsulta+"', '');");
+			} 
+			
+			BaseDeDatos.getStatement().executeUpdate("UPDATE SUBTITULO SET contenido='"+contenidoNuevo+"' WHERE cod_sub='"+codConsulta+"';");
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// Pide interactivamente un archivo
