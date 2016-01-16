@@ -698,7 +698,7 @@ public class VideoPlayer extends JFrame {
 		         // Lectura del fichero
 		         String linea;
 		         while((linea=br.readLine())!=null)
-		            System.out.println(linea);
+		             subtitulo = subtitulo + linea + "\n";
 		      }
 		      catch(Exception e){
 		         e.printStackTrace();
@@ -711,6 +711,9 @@ public class VideoPlayer extends JFrame {
 		            e2.printStackTrace();
 		         }
 		      }
+		    // Por si los subtitulos estan en ingles, hacer la correcion de la comilla simple
+		    subtitulo = subtitulo.replaceAll("'", "''");
+		    BaseDeDatos.getStatement().executeUpdate("UPDATE SUBTITULO SET contenido = '" + subtitulo + "' WHERE cod_sub = '" + codConsulta + "';");
 			
 			
 		} catch (SQLException e) {
