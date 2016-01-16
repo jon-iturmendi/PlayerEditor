@@ -6,7 +6,9 @@ import java.awt.image.ColorModel;
 
 import javax.swing.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,6 +57,7 @@ public class VideoPlayer extends JFrame {
 	JButton btnFijar;
 	JButton btnFijar_1;
 	JButton btnAnyadir;
+	JButton btnImportar; 
 	JTextField textField;
 	boolean inicioFijado = false;
 	boolean finFijado = false;
@@ -109,6 +112,7 @@ public class VideoPlayer extends JFrame {
 		btnFijar_1 = new JButton("Fijar");
 		btnAnyadir = new JButton("Añadir");
 		textField = new JTextField();
+		btnImportar = new JButton("Importar...");
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -275,8 +279,6 @@ public class VideoPlayer extends JFrame {
 		panel_2.add(panel_7);
 		
 		panel_7.add(btnAnyadir);
-		
-		JButton btnImportar = new JButton("Importar...");
 		panel_7.add(btnImportar);
 		
 		pAbajo.setPreferredSize(new Dimension(10,160));
@@ -302,7 +304,7 @@ public class VideoPlayer extends JFrame {
 				anyoLanzamiento = "";
 				
 				// Ventana de elección de video a insertar
-				File fPath = pedirVideo();
+				File fPath = pedirArchivo();
 				if (fPath==null) return;
 				titulo = fPath.getName();
 				
@@ -501,6 +503,13 @@ public class VideoPlayer extends JFrame {
 				anyadirLinea(textField.getText(), (lblInicio.getText()).substring(8), (lblFin.getText()).substring(5));
 			}
 		});
+		// Boton importar subtitulo
+		btnImportar.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				importarSubtitulo();
+			}
+		});
 		
 		// Cierre del player cuando se cierra la ventana
 		addWindowListener( new WindowAdapter() {
@@ -652,9 +661,66 @@ public class VideoPlayer extends JFrame {
 		
 	}
 	
+	private void importarSubtitulo(){
+		// Comprobar si el video en curso tiene ya algun subtítulo
+		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
+		String ruta = f.getAbsolutePath();
+		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
+	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
+	    ruta = ruta.replaceAll("\\\\", "/" );
+		try {
+			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + ruta + "';");
+			System.out.println(rs.getString(1));
+			String codConsulta = rs.getString(1);
+			ResultSet rsTitulo = BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM VIDEO WHERE ruta = '" + ruta + "';");
+			String tituloConsulta = rsTitulo.getString(1);
+			// Si no tiene, crear uno nuevo y asociarlo al video
+			// Primero generar un codigo para subtitulo nuevo
+			if (codConsulta==null){
+				ResultSet size = BaseDeDatos.getStatement().executeQuery("select MAX(substr(cod_sub, 2)) from subtitulo;");
+				int val = Integer.parseInt(size.getString(1));
+				codConsulta = "S" + (val+1);
+				// Asociar al video en curso el nuevo codigo de subtitulo
+				BaseDeDatos.getStatement().executeUpdate("UPDATE VIDEO SET cod_sub = '" + codConsulta + "' WHERE ruta='" + ruta+"';");
+				// Crear nuevo subtitulo en la tabla subtitulo
+				BaseDeDatos.getStatement().executeUpdate("INSERT INTO SUBTITULO VALUES ('"+codConsulta+"', '"+ tituloConsulta+"', '');");
+			}
+			// Pide interactivamente un archivo .srt a importar
+			File sub = pedirArchivo();
+			String subtitulo = "";
+		    FileReader fr = null;
+		    BufferedReader br = null;
+		 
+		      try {
+		         fr = new FileReader (sub);
+		         br = new BufferedReader(fr);
+		 
+		         // Lectura del fichero
+		         String linea;
+		         while((linea=br.readLine())!=null)
+		            System.out.println(linea);
+		      }
+		      catch(Exception e){
+		         e.printStackTrace();
+		      }finally{
+		         try{                    
+		            if( null != fr ){   
+		               fr.close();     
+		            }                  
+		         }catch (Exception e2){ 
+		            e2.printStackTrace();
+		         }
+		      }
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// Pide interactivamente un archivo
 		// (null si no se selecciona)
-		private static File pedirVideo() {
+		private static File pedirArchivo() {
 			File dirActual = new File( System.getProperty("user.dir") );
 			JFileChooser chooser = new JFileChooser( dirActual );
 			int returnVal = chooser.showOpenDialog( null );
