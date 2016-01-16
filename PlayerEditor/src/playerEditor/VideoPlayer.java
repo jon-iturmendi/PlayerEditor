@@ -498,7 +498,7 @@ public class VideoPlayer extends JFrame {
 		btnAnyadir.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				anyadirLinea(textField.getText(), lblInicio.getText(), lblFin.getText());
+				anyadirLinea(textField.getText(), (lblInicio.getText()).substring(8), (lblFin.getText()).substring(5));
 			}
 		});
 		
@@ -616,21 +616,33 @@ public class VideoPlayer extends JFrame {
 			if (codConsulta==null){
 				ResultSet size = BaseDeDatos.getStatement().executeQuery("select MAX(substr(cod_sub, 2)) from subtitulo;");
 				int val = Integer.parseInt(size.getString(1));
-				String codigo = "S" + (val+1);
+				codConsulta = "S" + (val+1);
 				// Asociar al video en curso el nuevo codigo de subtitulo
-				BaseDeDatos.getStatement().executeUpdate("UPDATE VIDEO SET cod_sub = '" + codigo + "' WHERE ruta='" + ruta+"';");
+				BaseDeDatos.getStatement().executeUpdate("UPDATE VIDEO SET cod_sub = '" + codConsulta + "' WHERE ruta='" + ruta+"';");
 				// Crear nuevo subtitulo en la tabla subtitulo
-				BaseDeDatos.getStatement().executeUpdate("INSERT INTO SUBTITULO VALUES ('"+codigo+"', '"+ tituloConsulta+"', '');");
+				BaseDeDatos.getStatement().executeUpdate("INSERT INTO SUBTITULO VALUES ('"+codConsulta+"', '"+ tituloConsulta+"', '');");
 			}
 			ResultSet rsContenido = BaseDeDatos.getStatement().executeQuery("SELECT contenido FROM subtitulo WHERE cod_sub='"+codConsulta+"';");
 			String contenido = rsContenido.getString(1);
 			String contenidoFinal;
-			int ultimoSub;
-			// Si el subtitulo está aun vacio, ultimoSub sera 0
+			int numeroSub;
+			// Si el subtitulo está aun vacio, numeroSub sera 1
 			if (contenido.equals("")){
-				ultimoSub = 0;
+				numeroSub = 1;
+			}else{
+			// Buscar el numero del ultimo subtitulo
+			int flecha = contenido.lastIndexOf("-->");
+			while (!(contenido.charAt(flecha)=='\n')){
+				flecha--;
 			}
+			String substring = contenido.substring(0, flecha);
+			String sNumero = substring.substring(substring.lastIndexOf('\n') + 1);
+			numeroSub = (Integer.parseInt(sNumero)) + 1;}
 			
+			contenidoFinal = contenido + Integer.toString(numeroSub) + "\n" + inicio + ",000 --> " + fin + ",000\n" + linea + "\n\n";
+			BaseDeDatos.getStatement().executeUpdate("UPDATE subtitulo SET contenido='" + contenidoFinal + "' WHERE cod_sub='"+codConsulta+"';");
+			inicioFijado = false;
+			finFijado = false;
 			
 			
 		} catch (SQLException e) {
