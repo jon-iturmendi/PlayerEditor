@@ -192,8 +192,11 @@ public class VideoPlayer extends JFrame {
 		pPropiedades.setVisible( false );
 		pBotoneraLR.setVisible( false );
 		pIzquierdaArriba.setLayout(new BorderLayout());
-//		pDerechaArriba.setBackground(new Color (8, 150, 245));
-//		pDerechaArriba.setPreferredSize(new Dimension(550, 70));
+		subtitulo.setFont(new Font("Arial", Font.BOLD, 20));
+		subtitulo.setForeground(Color.WHITE);
+		subtitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		subtitulo.setVisible(true);
+		cbMostrarSub.setSelected(true);
 
 		
 		
@@ -219,9 +222,8 @@ public class VideoPlayer extends JFrame {
 		pIzquierdaArriba.add( pBotonera, BorderLayout.NORTH );
 		pIzquierdaArriba.add( pInferior, BorderLayout.SOUTH );
 		pIzquierdaArriba.add( pIzquierda, BorderLayout.WEST );
+		mediaPlayerComponent.add(subtitulo, BorderLayout.SOUTH);
 		getContentPane().add(pIzquierdaArriba, BorderLayout.CENTER);
-//		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
-//		pDerechaArriba.setVisible(false);
 		
 		//Creación, configuración e inserción del panel inferior del editor
 		pAbajo.setBackground(Color.LIGHT_GRAY);
@@ -554,6 +556,13 @@ public class VideoPlayer extends JFrame {
 				textAreaSubtitulos.setText(leerSubtitulos());
 			}
 		});
+		// Checkbox mostrar subtitulos
+		cbMostrarSub.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				subtitulo.setVisible(!subtitulo.isVisible());
+			}
+		});
 		// Cierre del player cuando se cierra la ventana
 		addWindowListener( new WindowAdapter() {
 			@Override
@@ -688,6 +697,7 @@ public class VideoPlayer extends JFrame {
 			if (leerSubtitulos()!=null){
 				textAreaSubtitulos.setText(leerSubtitulos());
 			}
+			
 			
 		} else {
 			lCanciones.setSelectedIndices( new int[] {} );
@@ -933,6 +943,7 @@ public class VideoPlayer extends JFrame {
 					miVentana.listaRepVideos.add( path, ficheros );
 					miVentana.listaRepVideos.irAPrimero();
 					miVentana.lanzaVideo();
+					
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
