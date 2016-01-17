@@ -627,7 +627,8 @@ public class VideoPlayer extends JFrame {
 			      contador++; 
 			}
 			int numSub = 1;
-			while ((numSub<=contador)&&(encontrado==false)){
+			//(numSub<=contador)&&
+			while ((encontrado==false)){
 				inicio = textoVariable.substring(textoVariable.indexOf(busca)-13, textoVariable.indexOf(busca)-5 );
 				fin = textoVariable.substring(textoVariable.indexOf(busca)+4, textoVariable.indexOf(busca)+12 );
 				//Comparacion inicio fin
@@ -644,7 +645,7 @@ public class VideoPlayer extends JFrame {
 					
 					subtitulo.setText(frase);
 					subtitulo.repaint();
-//					System.out.println(frase);
+					System.out.println(frase);
 					encontrado=true;
 				} else {
 					numSub++;
