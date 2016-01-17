@@ -120,7 +120,7 @@ public class VideoPlayer extends JFrame {
 		btnImportar = new JButton("Importar...");
 		textAreaSubtitulos = new JTextArea();
 		guardarCambios = new JButton("Guardar cambios");
-		subtitulo = new JLabel("");
+		subtitulo = new JLabel(" ");
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -192,7 +192,7 @@ public class VideoPlayer extends JFrame {
 		pPropiedades.setVisible( false );
 		pBotoneraLR.setVisible( false );
 		pIzquierdaArriba.setLayout(new BorderLayout());
-		subtitulo.setFont(new Font("Arial", Font.BOLD, 20));
+		subtitulo.setFont(new Font("Arial", Font.BOLD, 25));
 		subtitulo.setForeground(Color.WHITE);
 		subtitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		subtitulo.setVisible(true);
@@ -312,7 +312,7 @@ public class VideoPlayer extends JFrame {
 		escribir.setViewportView(textAreaSubtitulos);
 		textAreaSubtitulos.setEditable(true);
 		pDerechaArriba.setVisible(false);
-		pDerechaArriba.setPreferredSize(new Dimension(500,200));
+		pDerechaArriba.setPreferredSize(new Dimension(400,200));
 		getContentPane().add(pDerechaArriba, BorderLayout.EAST);
 		
 		
