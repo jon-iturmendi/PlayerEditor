@@ -636,8 +636,8 @@ public class VideoPlayer extends JFrame {
 			      contador++; 
 			}
 			int numSub = 1;
-			//(numSub<=contador)&&
-			while ((encontrado==false)){
+			
+			while ((numSub<=contador)&&(encontrado==false)){
 				inicio = textoVariable.substring(textoVariable.indexOf(busca)-13, textoVariable.indexOf(busca)-5 );
 				fin = textoVariable.substring(textoVariable.indexOf(busca)+4, textoVariable.indexOf(busca)+12 );
 				//Comparacion inicio fin
@@ -651,6 +651,10 @@ public class VideoPlayer extends JFrame {
 					}else{
 						frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf("\n\n"));
 					}
+					// Anyado formato html a la frase para que el JLabel admita saltos de linea
+					frase = "<html>" + frase;
+					frase = frase + "</html>";
+					frase = frase.replaceAll("\n", "<br>");
 					
 					subtitulo.setText(frase);
 					subtitulo.repaint();
@@ -662,9 +666,9 @@ public class VideoPlayer extends JFrame {
 				}
 				
 			}
-			
-			
-			
+			if (encontrado==false){
+				subtitulo.setText(" ");
+			}
 			
 		}
 
