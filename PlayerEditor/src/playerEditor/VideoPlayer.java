@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.awt.image.ColorModel;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -646,26 +647,29 @@ public class VideoPlayer extends JFrame {
 				actual = actual.replaceAll(":", "");
 				//Si la comparacion es true, setText() y encontrado = true
 				if ((Integer.parseInt(actual)>=Integer.parseInt(inicio))&&(Integer.parseInt(actual)<=Integer.parseInt(fin))){
-					if(numSub==1){
+//					if(numSub==1){
 						frase = textoVariable.substring(textoVariable.indexOf(busca)+17, textoVariable.indexOf("\n\n"));
-					}else{
-						frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf("\n\n"));
-					}
+//					}else{
+//						frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf("\n\n"));
+//					}
 					// Anyado formato html a la frase para que el JLabel admita saltos de linea
-					frase = "<html>" + frase;
-					frase = frase + "</html>";
+					frase = "<html><center>" + frase;
+					frase = frase + "</center></html>";
 					frase = frase.replaceAll("\n", "<br>");
+					if (!subtitulo.getText().equals(frase)){
+						subtitulo.setText(frase);
+						subtitulo.repaint();
+					}
 					
-					subtitulo.setText(frase);
-					subtitulo.repaint();
-					System.out.println(frase);
+//					System.out.println(frase);
 					encontrado=true;
 				} else {
 					numSub++;
-					textoVariable = textoVariable.substring(textoVariable.indexOf(busca)+3);
+					textoVariable = textoVariable.substring(textoVariable.indexOf("\n\n")+2);
 				}
 				
 			}
+			System.out.println(actual+ " " + encontrado + " " + inicio+ " " + fin + " " + frase);
 			if (encontrado==false){
 				subtitulo.setText(" ");
 			}
@@ -896,6 +900,7 @@ public class VideoPlayer extends JFrame {
 		private static File pedirArchivo() {
 			File dirActual = new File( System.getProperty("user.dir") );
 			JFileChooser chooser = new JFileChooser( dirActual );
+			chooser.setFileFilter(new FileNameExtensionFilter("Ficheros de subtítulos", "srt"));
 			int returnVal = chooser.showOpenDialog( null );
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 				return chooser.getSelectedFile();
