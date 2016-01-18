@@ -121,7 +121,7 @@ public class VideoPlayer extends JFrame {
 		btnImportar = new JButton("Importar...");
 		textAreaSubtitulos = new JTextArea();
 		guardarCambios = new JButton("Guardar cambios");
-		subtitulo = new JLabel(" ");
+		subtitulo = new JLabel("<html> &nbsp; <br> &nbsp; </html>");
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -332,7 +332,7 @@ public class VideoPlayer extends JFrame {
 				anyoLanzamiento = "";
 				
 				// Ventana de elección de video a insertar
-				File fPath = pedirArchivo();
+				File fPath = pedirArchivo(false);
 				if (fPath==null) return;
 				titulo = fPath.getName();
 				
@@ -367,7 +367,7 @@ public class VideoPlayer extends JFrame {
 			       album = tfAlbum.getText();
 			       autor = tfAutor.getText();
 			       anyoLanzamiento = tfAnyo.getText();
-			    }
+			    
 				
 			    //Corrección de la ruta del video obtenida.
 			    ruta = fPath.getAbsolutePath();
@@ -395,7 +395,7 @@ public class VideoPlayer extends JFrame {
 				datos[6] = anyoLanzamiento;
 				
 				//Anyadir todos los datos a la BD y a la lista de reproducción
-				if (resultado == JOptionPane.OK_OPTION){
+				
 					listaRepVideos.addNuevo( datos );
 					lCanciones.repaint();
 				}
@@ -652,10 +652,17 @@ public class VideoPlayer extends JFrame {
 //					}else{
 //						frase = textoVariable.substring(textoVariable.indexOf('\n')+1, textoVariable.indexOf("\n\n"));
 //					}
+//						
+						
 					// Anyado formato html a la frase para que el JLabel admita saltos de linea
 					frase = "<html><center>" + frase;
-					frase = frase + "</center></html>";
+					
 					frase = frase.replaceAll("\n", "<br>");
+					// Poner un salto de linea al final de la frase si la frase tiene una sola linea
+					if (frase.indexOf("<br>")==-1){
+						frase = frase + "<br>&nbsp;";
+					}
+					frase = frase + "</center></html>";
 					if (!subtitulo.getText().equals(frase)){
 						subtitulo.setText(frase);
 						subtitulo.repaint();
@@ -669,9 +676,9 @@ public class VideoPlayer extends JFrame {
 				}
 				
 			}
-			System.out.println(actual+ " " + encontrado + " " + inicio+ " " + fin + " " + frase);
+//			System.out.println(actual+ " " + encontrado + " " + inicio+ " " + fin + " " + frase);
 			if (encontrado==false){
-				subtitulo.setText(" ");
+				subtitulo.setText("<html> &nbsp; <br> &nbsp; </html>");
 			}
 			
 		}
@@ -805,34 +812,36 @@ public class VideoPlayer extends JFrame {
 				BaseDeDatos.getStatement().executeUpdate("INSERT INTO SUBTITULO VALUES ('"+codConsulta+"', '"+ tituloConsulta+"', '');");
 			}
 			// Pide interactivamente un archivo .srt a importar
-			File sub = pedirArchivo();
-			String subtitulo = "";
-		    FileReader fr = null;
-		    BufferedReader br = null;
-		 
-		      try {
-		         fr = new FileReader (sub);
-		         br = new BufferedReader(fr);
-		 
-		         // Lectura del fichero
-		         String linea;
-		         while((linea=br.readLine())!=null)
-		             subtitulo = subtitulo + linea + "\n";
-		      }
-		      catch(Exception e){
-		         e.printStackTrace();
-		      }finally{
-		         try{                    
-		            if( null != fr ){   
-		               fr.close();     
-		            }                  
-		         }catch (Exception e2){ 
-		            e2.printStackTrace();
-		         }
-		      }
-		    // Por si los subtitulos estan en ingles, hacer la correcion de la comilla simple
-		    subtitulo = subtitulo.replaceAll("'", "''");
-		    BaseDeDatos.getStatement().executeUpdate("UPDATE SUBTITULO SET contenido = '" + subtitulo + "' WHERE cod_sub = '" + codConsulta + "';");
+			File sub = pedirArchivo(true);
+			if (sub!=null){
+				String subtitulo = "";
+			    FileReader fr = null;
+			    BufferedReader br = null;
+			 
+			      try {
+			         fr = new FileReader (sub);
+			         br = new BufferedReader(fr);
+			 
+			         // Lectura del fichero
+			         String linea;
+			         while((linea=br.readLine())!=null)
+			             subtitulo = subtitulo + linea + "\n";
+			      }
+			      catch(Exception e){
+			         e.printStackTrace();
+			      }finally{
+			         try{                    
+			            if( null != fr ){   
+			               fr.close();     
+			            }                  
+			         }catch (Exception e2){ 
+			            e2.printStackTrace();
+			         }
+			      }
+			    // Por si los subtitulos estan en ingles, hacer la correcion de la comilla simple
+			    subtitulo = subtitulo.replaceAll("'", "''");
+			    BaseDeDatos.getStatement().executeUpdate("UPDATE SUBTITULO SET contenido = '" + subtitulo + "' WHERE cod_sub = '" + codConsulta + "';");
+			}
 			
 			
 		} catch (SQLException e) {
@@ -897,10 +906,13 @@ public class VideoPlayer extends JFrame {
 	
 	// Pide interactivamente un archivo
 		// (null si no se selecciona)
-		private static File pedirArchivo() {
+		private static File pedirArchivo(boolean quieroSubtitulo) {
 			File dirActual = new File( System.getProperty("user.dir") );
 			JFileChooser chooser = new JFileChooser( dirActual );
-			chooser.setFileFilter(new FileNameExtensionFilter("Ficheros de subtítulos", "srt"));
+			if (quieroSubtitulo){
+				chooser.setFileFilter(new FileNameExtensionFilter("Ficheros de subtítulos", "srt"));
+			}
+			
 			int returnVal = chooser.showOpenDialog( null );
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 				return chooser.getSelectedFile();
