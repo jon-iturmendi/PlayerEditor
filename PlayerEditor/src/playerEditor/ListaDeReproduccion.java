@@ -156,6 +156,7 @@ public class ListaDeReproduccion implements ListModel<String> {
 		
 		File f = new File (datosVideo[3]);
 		add(f);
+		logger.log(Level.INFO, "Nuevo video añadido: " + datosVideo[1]);
 	}
 	
 	/** Devuelve uno de los ficheros de la lista

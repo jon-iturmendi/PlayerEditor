@@ -910,6 +910,7 @@ public class VideoPlayer extends JFrame {
 			
 			BaseDeDatos.getStatement().executeUpdate("UPDATE SUBTITULO SET contenido='"+contenidoNuevo+"' WHERE cod_sub='"+codConsulta+"';");
 			
+			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -979,7 +980,7 @@ public class VideoPlayer extends JFrame {
 					miVentana = new VideoPlayer();
 					miVentana.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					miVentana.setVisible( true );
-					miVentana.jVentana.setVisible(true);
+//					miVentana.jVentana.setVisible(true);
 					miVentana.redimensionaWindow();
 					miVentana.listaRepVideos.add( path, ficheros );
 					miVentana.listaRepVideos.irAPrimero();

@@ -1,4 +1,4 @@
-package ud.prog3.pr01;
+package playerEditor;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
