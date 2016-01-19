@@ -800,6 +800,7 @@ public class VideoPlayer extends JFrame {
 			numeroSub = (Integer.parseInt(sNumero)) + 1;}
 			
 			linea = linea.replaceAll("'", "''");
+			contenido = contenido.replaceAll("'", "''");
 			contenidoFinal = contenido + Integer.toString(numeroSub) + "\n" + inicio + ",000 --> " + fin + ",000\n" + linea + "\n\n";
 			BaseDeDatos.getStatement().executeUpdate("UPDATE subtitulo SET contenido='" + contenidoFinal + "' WHERE cod_sub='"+codConsulta+"';");
 			inicioFijado = false;
