@@ -51,6 +51,7 @@ public class VideoPlayer extends JFrame {
 	private JTextField tfPropCantante = null; // Label para propiedades - cantante
 	private JTextField tfPropComentarios=null;// Label para propiedades - comentarios
 	JPanel pBotonera;                         // Panel botonera (superior)
+	JPanel pIzquierda;
 	JPanel pDerechaArriba;
 	JPanel pIzquierdaArriba;
 	JPanel pAbajo;
@@ -66,6 +67,9 @@ public class VideoPlayer extends JFrame {
 	JLabel subtitulo;
 	boolean inicioFijado = false;
 	boolean finFijado = false;
+	JWindow jVentana;
+	int coordX;
+	int coordY;
 	JPanel pBotoneraLR;                       // Panel botonera (lista de reproducciÃ³n)
 	ArrayList<JButton> botones;               // Lista de botones
 	ArrayList<JButton> botonesLR;             // Lista de botones (lista de reproducciÃ³n)
@@ -108,6 +112,7 @@ public class VideoPlayer extends JFrame {
 		tfPropCantante = new JTextField( "", 10 );
 		tfPropComentarios = new JTextField( "", 30 );
 		pBotonera = new JPanel();
+		pIzquierda = new JPanel();
 		pBotoneraLR = new JPanel();
 		pDerechaArriba = new JPanel();
 		pIzquierdaArriba = new JPanel();
@@ -122,6 +127,7 @@ public class VideoPlayer extends JFrame {
 		textAreaSubtitulos = new JTextArea();
 		guardarCambios = new JButton("Guardar cambios");
 		subtitulo = new JLabel("<html> &nbsp; <br> &nbsp; </html>");
+		jVentana = new JWindow();
 
 		// En vez de "a mano":
 		// JButton bAnyadir = new JButton( new ImageIcon( VideoPlayer.class.getResource("img/Button Add.png")) );
@@ -145,7 +151,7 @@ public class VideoPlayer extends JFrame {
 		}
 		JPanel pPropiedades = new JPanel();
 		JPanel pInferior = new JPanel();
-		final JPanel pIzquierda = new JPanel();
+//		final JPanel pIzquierda = new JPanel();
 		
 		// Componente de VCLj
         mediaPlayerComponent = new EmbeddedMediaPlayerComponent() {
@@ -198,7 +204,9 @@ public class VideoPlayer extends JFrame {
 		subtitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		subtitulo.setVisible(true);
 		cbMostrarSub.setSelected(true);
-
+		
+//		AWTUtilities.setWindowOpaque(jVentana, false);
+//		jVentana.setBounds(100, 100, 300, 300);
 		
 		
 		// Enlace de componentes y contenedores
@@ -225,6 +233,8 @@ public class VideoPlayer extends JFrame {
 		pIzquierdaArriba.add( pIzquierda, BorderLayout.WEST );
 		mediaPlayerComponent.add(subtitulo, BorderLayout.SOUTH);
 		getContentPane().add(pIzquierdaArriba, BorderLayout.CENTER);
+		
+		
 		
 		//Creación, configuración e inserción del panel inferior del editor
 		pAbajo.setBackground(Color.LIGHT_GRAY);
@@ -732,6 +742,7 @@ public class VideoPlayer extends JFrame {
 			return null;
 	}
 	
+	
 	private void anyadirLinea(String linea, String inicio, String fin){
 		// Comprobar si el video en curso tiene ya algun subtítulo
 		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
@@ -919,7 +930,14 @@ public class VideoPlayer extends JFrame {
 			else 
 				return null;
 		}
-
+		
+		public void redimensionaWindow(){
+//			System.out.println("El punto Y: "+getContentPane().getLocationOnScreen().y);
+			jVentana.getContentPane().setBackground(Color.RED);
+			jVentana.setBounds(mediaPlayerComponent.getLocationOnScreen().x, mediaPlayerComponent.getLocationOnScreen().y,
+					pBotonera.getWidth()-pIzquierda.getWidth(), pIzquierda.getHeight());
+		}
+		
 		private static String ficheros;
 		private static String path;
 	/** Ejecuta una ventana de VideoPlayer.
@@ -961,6 +979,8 @@ public class VideoPlayer extends JFrame {
 					miVentana = new VideoPlayer();
 					miVentana.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					miVentana.setVisible( true );
+					miVentana.jVentana.setVisible(true);
+					miVentana.redimensionaWindow();
 					miVentana.listaRepVideos.add( path, ficheros );
 					miVentana.listaRepVideos.irAPrimero();
 					miVentana.lanzaVideo();
