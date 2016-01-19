@@ -21,8 +21,7 @@ import javax.swing.event.ListDataListener;
  * (al estilo de un array / arraylist)
  * con marcas de error en los ficheros y con métodos para cambiar la posición
  * de los elementos en la lista, borrar elementos y añadir nuevos.
- * @author Andoni Eguíluz Morán
- * Facultad de Ingeniería - Universidad de Deusto
+ * @author Andoni Eguíluz, Jon Iturmendi y Pablo Cabezali
  */
 public class ListaDeReproduccion implements ListModel<String> {
 	ArrayList<File> ficherosLista;        // ficheros de la lista de reproducción
@@ -68,11 +67,9 @@ public class ListaDeReproduccion implements ListModel<String> {
 		ficherosErroneos = new ArrayList<Boolean>();
 	}
 
-	/** Añade a la lista de reproducción todos los ficheros que haya en la 
-	 * carpeta indicada, que cumplan el filtro indicado.
+	/** Añade a la lista de reproducción todos los ficheros de la base de datos que cumplan el filtro indicado.
 	 * Si hay cualquier error, la lista de reproducción queda solo con los ficheros
 	 * que hayan podido ser cargados de forma correcta.
-	 * @param carpetaFicheros	Path de la carpeta donde buscar los ficheros
 	 * @param filtroFicheros	Filtro del formato que tienen que tener los nombres de
 	 * 							los ficheros para ser cargados.
 	 * 							String con cualquier letra o dígito. Si tiene un asterisco
@@ -81,10 +78,9 @@ public class ListaDeReproduccion implements ListModel<String> {
 	 * 							que empiece por p y tenga cualquier extensión.
 	 * @return	Número de ficheros que han sido añadidos a la lista
 	 */
-	public int add(String carpetaFicheros, String filtroFicheros) {
+	public int add(String filtroFicheros) {
 		
 		int ficsAnyadidos = 0;
-		if (carpetaFicheros!=null) {
 			logger.log( Level.INFO, "Añadiendo ficheros con filtro " + filtroFicheros );
 			try {
 				filtroFicheros = filtroFicheros.replaceAll( "\\.", "\\\\." );  // Pone el símbolo de la expresión regular \. donde figure un .
@@ -136,7 +132,7 @@ public class ListaDeReproduccion implements ListModel<String> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+
 		logger.log( Level.INFO, "ficheros añadidos: " + ficsAnyadidos );
 		return ficsAnyadidos;
 	}

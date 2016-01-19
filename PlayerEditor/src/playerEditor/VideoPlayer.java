@@ -27,8 +27,9 @@ import uk.co.caprica.vlcj.player.embedded.FullScreenStrategy;
 import uk.co.caprica.vlcj.player.embedded.windows.Win32FullScreenStrategy;
 
 /**
- * Ventana principal del playerEditor.
+ * Ventana principal del PlayerEditor.
  * En esta misma ventana se encuentran tanto el reproductor como el editor de subtitulos.
+ * @author Jon Iturmendi y Pablo Cabezali
  *
  */
 public class VideoPlayer extends JFrame {
@@ -612,6 +613,10 @@ public class VideoPlayer extends JFrame {
 			    }
 		});
 	}
+	
+		/**	Visualiza el tiempo de reproduccion del video en un instante
+		 * 
+		 */
 		private void visualizaTiempoRep() {
 			pbVideo.setValue( (int) (10000.0 * 
 					mediaPlayer.getTime() /
@@ -627,6 +632,11 @@ public class VideoPlayer extends JFrame {
 				
 		}
 		
+		/**
+		 * Metodo que actualiza el subtitulo si le toca cambiarse.
+		 * Utiliza un algoritmo que accede al texto del subtitulo para 
+		 * encontrar el subtitulo que toca en ese instante.
+		 */
 		private void actualizaSubtitulo(){
 			String texto = "";
 			if (textAreaSubtitulos.getText()!=null){
@@ -742,7 +752,12 @@ public class VideoPlayer extends JFrame {
 			return null;
 	}
 	
-	
+	/**
+	 * Anyade una linea de subtitulo nueva al texto del subtitulo del video en curso.
+	 * @param linea		Frase del subtitulo
+	 * @param inicio	Tiempo de inicio del subtitulo	
+	 * @param fin		Tiempo final del subtitulo
+	 */
 	private void anyadirLinea(String linea, String inicio, String fin){
 		// Comprobar si el video en curso tiene ya algun subtítulo
 		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
@@ -798,6 +813,9 @@ public class VideoPlayer extends JFrame {
 		
 	}
 	
+	/**
+	 * Metodo para importar un subtitulo con formato .srt
+	 */
 	private void importarSubtitulo(){
 		// Comprobar si el video en curso tiene ya algun subtítulo
 		File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
@@ -860,6 +878,10 @@ public class VideoPlayer extends JFrame {
 		}
 	}
 	
+	/**
+	 * Metodo que devuelve un string con todo el texto de los subtitulos del video en curso
+	 * @return texto	Texto del subtitulo
+	 */
 	public String leerSubtitulos(){
 		String texto = null;
 		ResultSet rs;
@@ -882,6 +904,9 @@ public class VideoPlayer extends JFrame {
 		return texto;
 	}
 	
+	/**
+	 * Metodo que sustituye el texto del subtitulo del video en curso por el texto del JTextArea 
+	 */
 	public void guardarCambios(){
 		String contenidoNuevo = textAreaSubtitulos.getText();
 		contenidoNuevo = contenidoNuevo.replaceAll("'", "''");
@@ -916,8 +941,11 @@ public class VideoPlayer extends JFrame {
 		}
 	}
 	
-	// Pide interactivamente un archivo
-		// (null si no se selecciona)
+		/**
+		 * Metodo que pide interactivamente un video o un archivo de subtitulo .srt
+		 * @param quieroSubtitulo	Boolean que indica si se esta buscando un video o un subtitulo.
+		 * @return	Devuelve el fichero seleccionado
+		 */
 		private static File pedirArchivo(boolean quieroSubtitulo) {
 			File dirActual = new File( System.getProperty("user.dir") );
 			JFileChooser chooser = new JFileChooser( dirActual );
@@ -982,7 +1010,7 @@ public class VideoPlayer extends JFrame {
 					miVentana.setVisible( true );
 //					miVentana.jVentana.setVisible(true);
 					miVentana.redimensionaWindow();
-					miVentana.listaRepVideos.add( path, ficheros );
+					miVentana.listaRepVideos.add( ficheros );
 					miVentana.listaRepVideos.irAPrimero();
 					miVentana.lanzaVideo();
 					
