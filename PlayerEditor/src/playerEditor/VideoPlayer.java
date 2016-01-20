@@ -765,10 +765,13 @@ public class VideoPlayer extends JFrame {
 		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
 	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
 	    ruta = ruta.replaceAll("\\\\", "/" );
+	    String codConsulta = "";
+	    boolean esNull = true;
 		try {
 			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + ruta + "';");
-			System.out.println(rs.getString(1));
-			String codConsulta = rs.getString(1);
+			System.out.println("Mira aqui:" +rs.getString(1));
+			codConsulta = rs.getString(1);
+			
 			ResultSet rsTitulo = BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM VIDEO WHERE ruta = '" + ruta + "';");
 			String tituloConsulta = rsTitulo.getString(1);
 			// Si no tiene, crear uno nuevo y asociarlo al video
@@ -824,10 +827,13 @@ public class VideoPlayer extends JFrame {
 		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
 	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
 	    ruta = ruta.replaceAll("\\\\", "/" );
+	    String codConsulta = "";
+	    boolean esNull = true;
 		try {
 			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + ruta + "';");
-			System.out.println(rs.getString(1));
-			String codConsulta = rs.getString(1);
+			System.out.println("Mira aqui:" +rs.getString(1));
+			codConsulta = rs.getString(1);
+			
 			ResultSet rsTitulo = BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM VIDEO WHERE ruta = '" + ruta + "';");
 			String tituloConsulta = rsTitulo.getString(1);
 			// Si no tiene, crear uno nuevo y asociarlo al video
@@ -884,8 +890,9 @@ public class VideoPlayer extends JFrame {
 	 * @return texto	Texto del subtitulo
 	 */
 	public String leerSubtitulos(){
-		String texto = null;
+		String texto = "";
 		ResultSet rs;
+		ResultSet rsCodSub;
     	ResultSet rsContenido;
     	File f = listaRepVideos.getFic(listaRepVideos.getFicSeleccionado());
 		String ruta = f.getAbsolutePath();
@@ -893,15 +900,22 @@ public class VideoPlayer extends JFrame {
 	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
 	    ruta = ruta.replaceAll("\\\\", "/" );
 		try {
-			rs =BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM video WHERE ruta ='"+ ruta +"';");
-			String titulo = rs.getString(1);
-			rsContenido=BaseDeDatos.getStatement().executeQuery("SELECT contenido FROM subtitulo WHERE titulo ='"+ titulo +"';");
-			texto = rsContenido.getString(1);
+			rsCodSub = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM video WHERE ruta='"+ruta+"';");
+			String codSub = rsCodSub.getString(1);
+			if (codSub!=null){
+				rs =BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM video WHERE ruta ='"+ ruta +"';");
+				String titulo = rs.getString(1);
+				rsContenido=BaseDeDatos.getStatement().executeQuery("SELECT contenido FROM subtitulo WHERE titulo ='"+ titulo +"';");
+				texto = rsContenido.getString(1);
+			}
+				
+			return texto;
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return texto;
 	}
 	
@@ -916,10 +930,14 @@ public class VideoPlayer extends JFrame {
 		ruta = ruta.substring(ruta.indexOf("PlayerEditor"));
 	    ruta = ruta.substring(ruta.indexOf("\\") + 1);	
 	    ruta = ruta.replaceAll("\\\\", "/" );
+	    String codConsulta = "";
+	    boolean esNull = true;
 		try {
 			ResultSet rs = BaseDeDatos.getStatement().executeQuery("SELECT cod_sub FROM VIDEO WHERE ruta = '" + ruta + "';");
-			System.out.println(rs.getString(1));
-			String codConsulta = rs.getString(1);
+			
+				codConsulta = rs.getString(1);
+				
+			
 			ResultSet rsTitulo = BaseDeDatos.getStatement().executeQuery("SELECT titulo FROM VIDEO WHERE ruta = '" + ruta + "';");
 			String tituloConsulta = rsTitulo.getString(1);
 			// Si no tiene, crear uno nuevo y asociarlo al video
